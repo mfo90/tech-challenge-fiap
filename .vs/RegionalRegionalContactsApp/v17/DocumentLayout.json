@@ -1,7 +1,44 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Users\\Pichau\\Desktop\\FIAP\\FASE 1\\Tech Challenge\\",
-  "Documents": [],
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{EBD5D5FD-4F5C-47F3-9B87-7125072D4DBC}|RegionalContactsApp.API\\RegionalContactsApp.API.csproj|c:\\users\\pichau\\desktop\\fiap\\fase 1\\tech challenge\\regionalcontactsapp.api\\controllers\\regionscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EBD5D5FD-4F5C-47F3-9B87-7125072D4DBC}|RegionalContactsApp.API\\RegionalContactsApp.API.csproj|solutionrelative:regionalcontactsapp.api\\controllers\\regionscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EBD5D5FD-4F5C-47F3-9B87-7125072D4DBC}|RegionalContactsApp.API\\RegionalContactsApp.API.csproj|c:\\users\\pichau\\desktop\\fiap\\fase 1\\tech challenge\\regionalcontactsapp.api\\controllers\\contactscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EBD5D5FD-4F5C-47F3-9B87-7125072D4DBC}|RegionalContactsApp.API\\RegionalContactsApp.API.csproj|solutionrelative:regionalcontactsapp.api\\controllers\\contactscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{19E20DE6-E293-4433-B3CD-75EDC448C71A}|RegionalContactsApp.Application\\RegionalContactsApp.Application.csproj|c:\\users\\pichau\\desktop\\fiap\\fase 1\\tech challenge\\regionalcontactsapp.application\\services\\contactservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{19E20DE6-E293-4433-B3CD-75EDC448C71A}|RegionalContactsApp.Application\\RegionalContactsApp.Application.csproj|solutionrelative:regionalcontactsapp.application\\services\\contactservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{19E20DE6-E293-4433-B3CD-75EDC448C71A}|RegionalContactsApp.Application\\RegionalContactsApp.Application.csproj|c:\\users\\pichau\\desktop\\fiap\\fase 1\\tech challenge\\regionalcontactsapp.application\\services\\regionservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{19E20DE6-E293-4433-B3CD-75EDC448C71A}|RegionalContactsApp.Application\\RegionalContactsApp.Application.csproj|solutionrelative:regionalcontactsapp.application\\services\\regionservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4A741C1C-BEC7-416B-AB63-8F30FE74A6A9}|RegionalContactsApp.Infrastructure\\RegionalContactsApp.Infrastructure.csproj|c:\\users\\pichau\\desktop\\fiap\\fase 1\\tech challenge\\regionalcontactsapp.infrastructure\\repositories\\regionrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4A741C1C-BEC7-416B-AB63-8F30FE74A6A9}|RegionalContactsApp.Infrastructure\\RegionalContactsApp.Infrastructure.csproj|solutionrelative:regionalcontactsapp.infrastructure\\repositories\\regionrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D0F99A86-41CD-4F7D-833E-E555CAE2961C}|RegionalContactsApp.Domain\\RegionalContactsApp.Domain.csproj|c:\\users\\pichau\\desktop\\fiap\\fase 1\\tech challenge\\regionalcontactsapp.domain\\entities\\region.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D0F99A86-41CD-4F7D-833E-E555CAE2961C}|RegionalContactsApp.Domain\\RegionalContactsApp.Domain.csproj|solutionrelative:regionalcontactsapp.domain\\entities\\region.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D0F99A86-41CD-4F7D-833E-E555CAE2961C}|RegionalContactsApp.Domain\\RegionalContactsApp.Domain.csproj|c:\\users\\pichau\\desktop\\fiap\\fase 1\\tech challenge\\regionalcontactsapp.domain\\entities\\contact.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D0F99A86-41CD-4F7D-833E-E555CAE2961C}|RegionalContactsApp.Domain\\RegionalContactsApp.Domain.csproj|solutionrelative:regionalcontactsapp.domain\\entities\\contact.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4A741C1C-BEC7-416B-AB63-8F30FE74A6A9}|RegionalContactsApp.Infrastructure\\RegionalContactsApp.Infrastructure.csproj|c:\\users\\pichau\\desktop\\fiap\\fase 1\\tech challenge\\regionalcontactsapp.infrastructure\\repositories\\contactrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4A741C1C-BEC7-416B-AB63-8F30FE74A6A9}|RegionalContactsApp.Infrastructure\\RegionalContactsApp.Infrastructure.csproj|solutionrelative:regionalcontactsapp.infrastructure\\repositories\\contactrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AA873513-A83C-4F81-9608-5307EE90F1CA}|RegionalContactsApp.Tests\\RegionalContactsApp.Tests.csproj|c:\\users\\pichau\\desktop\\fiap\\fase 1\\tech challenge\\regionalcontactsapp.tests\\contactservicetests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AA873513-A83C-4F81-9608-5307EE90F1CA}|RegionalContactsApp.Tests\\RegionalContactsApp.Tests.csproj|solutionrelative:regionalcontactsapp.tests\\contactservicetests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -9,11 +46,124 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": -1,
+          "SelectedChildIndex": 0,
           "Children": [
             {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "RegionsController.cs",
+              "DocumentMoniker": "C:\\Users\\Pichau\\Desktop\\FIAP\\FASE 1\\Tech Challenge\\RegionalContactsApp.API\\Controllers\\RegionsController.cs",
+              "RelativeDocumentMoniker": "RegionalContactsApp.API\\Controllers\\RegionsController.cs",
+              "ToolTip": "C:\\Users\\Pichau\\Desktop\\FIAP\\FASE 1\\Tech Challenge\\RegionalContactsApp.API\\Controllers\\RegionsController.cs",
+              "RelativeToolTip": "RegionalContactsApp.API\\Controllers\\RegionsController.cs",
+              "ViewState": "AQIAABAAAAAAAAAAAAAgwBgAAABFAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-26T14:20:27.464Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "ContactService.cs",
+              "DocumentMoniker": "C:\\Users\\Pichau\\Desktop\\FIAP\\FASE 1\\Tech Challenge\\RegionalContactsApp.Application\\Services\\ContactService.cs",
+              "RelativeDocumentMoniker": "RegionalContactsApp.Application\\Services\\ContactService.cs",
+              "ToolTip": "C:\\Users\\Pichau\\Desktop\\FIAP\\FASE 1\\Tech Challenge\\RegionalContactsApp.Application\\Services\\ContactService.cs",
+              "RelativeToolTip": "RegionalContactsApp.Application\\Services\\ContactService.cs",
+              "ViewState": "AQIAAAMAAAAAAAAAAADwvz0AAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-26T14:18:53.835Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "RegionService.cs",
+              "DocumentMoniker": "C:\\Users\\Pichau\\Desktop\\FIAP\\FASE 1\\Tech Challenge\\RegionalContactsApp.Application\\Services\\RegionService.cs",
+              "RelativeDocumentMoniker": "RegionalContactsApp.Application\\Services\\RegionService.cs",
+              "ToolTip": "C:\\Users\\Pichau\\Desktop\\FIAP\\FASE 1\\Tech Challenge\\RegionalContactsApp.Application\\Services\\RegionService.cs",
+              "RelativeToolTip": "RegionalContactsApp.Application\\Services\\RegionService.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAACEAAAAFAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-26T14:17:40.915Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "RegionRepository.cs",
+              "DocumentMoniker": "C:\\Users\\Pichau\\Desktop\\FIAP\\FASE 1\\Tech Challenge\\RegionalContactsApp.Infrastructure\\Repositories\\RegionRepository.cs",
+              "RelativeDocumentMoniker": "RegionalContactsApp.Infrastructure\\Repositories\\RegionRepository.cs",
+              "ToolTip": "C:\\Users\\Pichau\\Desktop\\FIAP\\FASE 1\\Tech Challenge\\RegionalContactsApp.Infrastructure\\Repositories\\RegionRepository.cs",
+              "RelativeToolTip": "RegionalContactsApp.Infrastructure\\Repositories\\RegionRepository.cs",
+              "ViewState": "AQIAABUAAAAAAAAAAAA5wAwAAAA1AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-26T14:14:07.211Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Region.cs",
+              "DocumentMoniker": "C:\\Users\\Pichau\\Desktop\\FIAP\\FASE 1\\Tech Challenge\\RegionalContactsApp.Domain\\Entities\\Region.cs",
+              "RelativeDocumentMoniker": "RegionalContactsApp.Domain\\Entities\\Region.cs",
+              "ToolTip": "C:\\Users\\Pichau\\Desktop\\FIAP\\FASE 1\\Tech Challenge\\RegionalContactsApp.Domain\\Entities\\Region.cs",
+              "RelativeToolTip": "RegionalContactsApp.Domain\\Entities\\Region.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAsAAAAoAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-26T14:12:45.707Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Contact.cs",
+              "DocumentMoniker": "C:\\Users\\Pichau\\Desktop\\FIAP\\FASE 1\\Tech Challenge\\RegionalContactsApp.Domain\\Entities\\Contact.cs",
+              "RelativeDocumentMoniker": "RegionalContactsApp.Domain\\Entities\\Contact.cs",
+              "ToolTip": "C:\\Users\\Pichau\\Desktop\\FIAP\\FASE 1\\Tech Challenge\\RegionalContactsApp.Domain\\Entities\\Contact.cs",
+              "RelativeToolTip": "RegionalContactsApp.Domain\\Entities\\Contact.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-26T14:11:23.516Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "ContactRepository.cs",
+              "DocumentMoniker": "C:\\Users\\Pichau\\Desktop\\FIAP\\FASE 1\\Tech Challenge\\RegionalContactsApp.Infrastructure\\Repositories\\ContactRepository.cs",
+              "RelativeDocumentMoniker": "RegionalContactsApp.Infrastructure\\Repositories\\ContactRepository.cs",
+              "ToolTip": "C:\\Users\\Pichau\\Desktop\\FIAP\\FASE 1\\Tech Challenge\\RegionalContactsApp.Infrastructure\\Repositories\\ContactRepository.cs",
+              "RelativeToolTip": "RegionalContactsApp.Infrastructure\\Repositories\\ContactRepository.cs",
+              "ViewState": "AQIAABwAAAAAAAAAAAAiwDIAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-26T14:10:01.828Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "ContactsController.cs",
+              "DocumentMoniker": "C:\\Users\\Pichau\\Desktop\\FIAP\\FASE 1\\Tech Challenge\\RegionalContactsApp.API\\Controllers\\ContactsController.cs",
+              "RelativeDocumentMoniker": "RegionalContactsApp.API\\Controllers\\ContactsController.cs",
+              "ToolTip": "C:\\Users\\Pichau\\Desktop\\FIAP\\FASE 1\\Tech Challenge\\RegionalContactsApp.API\\Controllers\\ContactsController.cs",
+              "RelativeToolTip": "RegionalContactsApp.API\\Controllers\\ContactsController.cs",
+              "ViewState": "AQIAACsAAAAAAAAAAAAAAEIAAAANAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-26T14:06:42.52Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "ContactServiceTests.cs",
+              "DocumentMoniker": "C:\\Users\\Pichau\\Desktop\\FIAP\\FASE 1\\Tech Challenge\\RegionalContactsApp.Tests\\ContactServiceTests.cs",
+              "RelativeDocumentMoniker": "RegionalContactsApp.Tests\\ContactServiceTests.cs",
+              "ToolTip": "C:\\Users\\Pichau\\Desktop\\FIAP\\FASE 1\\Tech Challenge\\RegionalContactsApp.Tests\\ContactServiceTests.cs",
+              "RelativeToolTip": "RegionalContactsApp.Tests\\ContactServiceTests.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-26T14:05:42.294Z",
+              "EditorCaption": ""
             }
           ]
         }
