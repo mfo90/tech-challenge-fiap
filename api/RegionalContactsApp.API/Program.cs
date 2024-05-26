@@ -15,6 +15,8 @@ string connectionString = builder.Configuration.GetConnectionString("DefaultConn
 // Adicione serviços à coleção de injeção de dependência
 builder.Services.AddScoped<IContactRepository, ContactRepository>();
 builder.Services.AddScoped<IRegionRepository, RegionRepository>();
+builder.Services.AddScoped<IDatabaseInitializer, DatabaseInitializer>();
+
 builder.Services.AddScoped<IContactService, ContactService>();
 builder.Services.AddScoped<IRegionService, RegionService>();
 
@@ -54,10 +56,17 @@ builder.Services.AddSwaggerGen(c =>
 
 var app = builder.Build();
 
+// Inicialize o banco de dados
+using (var scope = app.Services.CreateScope())
+{
+    var dbInitializer = scope.ServiceProvider.GetRequiredService<IDatabaseInitializer>();
+    dbInitializer.Initialize();
+}
+
 // Configure o pipeline de requisição HTTP
 //if (app.Environment.IsDevelopment())
 //{
-    app.UseSwagger();
+app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "Regional Contacts API v1");
