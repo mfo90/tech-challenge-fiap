@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace RegionalContactsApp.Application.Services
 {
-    public class ContactService
+    public class ContactService : IContactService
     {
         private readonly IContactRepository _contactRepository;
         private readonly IRegionRepository _regionRepository;

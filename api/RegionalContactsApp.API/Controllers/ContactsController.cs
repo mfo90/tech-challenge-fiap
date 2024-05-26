@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RegionalContactsApp.Application.Services;
 using RegionalContactsApp.Domain.Entities;
+using RegionalContactsApp.Domain.Interfaces;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace RegionalContactsApp.API.Controllers
 {
@@ -8,10 +11,10 @@ namespace RegionalContactsApp.API.Controllers
     [Route("api/[controller]")]
     public class ContactsController : ControllerBase
     {
-        private readonly ContactService _contactService;
-        private readonly RegionService _regionService;
+        private readonly IContactService _contactService;
+        private readonly IRegionService _regionService;
 
-        public ContactsController(ContactService contactService, RegionService regionService)
+        public ContactsController(IContactService contactService, IRegionService regionService)
         {
             _contactService = contactService;
             _regionService = regionService;
