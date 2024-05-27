@@ -1,11 +1,8 @@
 ﻿using Dapper;
 using RegionalContactsApp.Domain.Entities;
 using RegionalContactsApp.Domain.Interfaces;
-using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace RegionalContactsApp.Infrastructure.Repositories
@@ -45,6 +42,18 @@ namespace RegionalContactsApp.Infrastructure.Repositories
         {
             var sql = "DELETE FROM Contacts WHERE Id = @Id";
             await _dbConnection.ExecuteAsync(sql, new { Id = id });
+        }
+
+        public async Task<IEnumerable<Contact>> GetContactsByDDDAsync(string ddd)
+        {
+            var sql = "SELECT * FROM Contacts WHERE DDD = @DDD";
+            return await _dbConnection.QueryAsync<Contact>(sql, new { DDD = ddd });
+        }
+
+        public async Task<Contact> GetContactByEmailAsync(string email)
+        {
+            var sql = "SELECT * FROM Contacts WHERE Email = @Email";
+            return await _dbConnection.QueryFirstOrDefaultAsync<Contact>(sql, new { Email = email });
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using RegionalContactsApp.Application.Services;
 using RegionalContactsApp.Domain.Entities;
 using RegionalContactsApp.Domain.Interfaces;
 using System.Collections.Generic;
@@ -8,6 +10,7 @@ namespace RegionalContactsApp.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class RegionsController : ControllerBase
     {
         private readonly IRegionService _regionService;
@@ -35,10 +38,24 @@ namespace RegionalContactsApp.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> CreateRegion(Region region)
+        public async Task<ActionResult> CreateRegion([FromBody] Region region)
         {
             await _regionService.AddRegionAsync(region);
             return CreatedAtAction(nameof(GetRegion), new { ddd = region.DDD }, region);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<bool> UpdateAsync(Region region)
+        {
+            await _regionService.UpdateAsync(region);
+            return true;
+        }
+
+        [HttpDelete("{ddd}")]
+        public async Task<IActionResult> DeleteContact(string ddd)
+        {
+            await _regionService.DeleteAsync(ddd);
+            return NoContent();
         }
     }
 }

@@ -12,5 +12,8 @@ namespace RegionalContactsApp.Domain.Interfaces
         Task AddAsync(Region region);
         Task<IEnumerable<Region>> GetAllAsync();
         Task<Region> GetByDDDAsync(string ddd);
+        Task UpdateAsync(Region region);
+        Task DeleteAsync(string ddd);
+        Task<IEnumerable<Contact>> GetContactsByDDDAsync(string ddd);
     }
 }

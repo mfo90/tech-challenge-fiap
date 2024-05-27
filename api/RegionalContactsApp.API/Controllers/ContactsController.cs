@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using RegionalContactsApp.Application.Services;
 using RegionalContactsApp.Domain.Entities;
 using RegionalContactsApp.Domain.Interfaces;
@@ -9,6 +10,7 @@ namespace RegionalContactsApp.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class ContactsController : ControllerBase
     {
         private readonly IContactService _contactService;
@@ -21,10 +23,18 @@ namespace RegionalContactsApp.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<Contact>> GetContacts()
+        public async Task<IEnumerable<Contact>> GetContacts([FromQuery] string ddd = null)
         {
-            return await _contactService.GetAllContactsAsync();
+            if (string.IsNullOrWhiteSpace(ddd))
+            {
+                return await _contactService.GetAllContactsAsync();
+            }
+            else
+            {
+                return await _contactService.GetContactsByDDDAsync(ddd);
+            }
         }
+
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Contact>> GetContact(int id)

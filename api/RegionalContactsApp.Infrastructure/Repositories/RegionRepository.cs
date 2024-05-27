@@ -34,5 +34,23 @@ namespace RegionalContactsApp.Infrastructure.Repositories
             var sql = "INSERT INTO Regions (DDD, Name) VALUES (@DDD, @Name)";
             await _dbConnection.ExecuteAsync(sql, region);
         }
+
+        public async Task UpdateAsync(Region region)
+        {
+            var sql = "UPDATE Regions SET Name = @Name WHERE DDD = @DDD";
+            await _dbConnection.ExecuteAsync(sql, region);
+        }
+
+        public async Task DeleteAsync(string ddd)
+        {
+            var sql = "DELETE FROM Regions WHERE DDD = @DDD";
+            await _dbConnection.ExecuteAsync(sql, new { DDD = ddd });
+        }
+
+        public async Task<IEnumerable<Contact>> GetContactsByDDDAsync(string ddd)
+        {
+            var sql = "SELECT * FROM Contacts WHERE DDD = @DDD";
+            return await _dbConnection.QueryAsync<Contact>(sql, new { DDD = ddd });
+        }
     }
 }
