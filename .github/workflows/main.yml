@@ -14,8 +14,9 @@ jobs:
       uses: actions/checkout@v2
 
     - name: List project files
-      run: ls -l ./api
-      run: ls -l .
+      run: |
+        ls -l ./api
+        ls -l .
 
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v1
