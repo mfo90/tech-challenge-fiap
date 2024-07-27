@@ -16,13 +16,13 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: '8.0.x'
+        dotnet-version: '8.0.x'  # Certifique-se de que a versão do .NET Core está correta
 
     - name: Restore dependencies
-      run: dotnet restore api/RegionalContactsApp.sln
+      run: dotnet restore api/RegionalRegionalContactsApp.sln
 
     - name: Build solution
-      run: dotnet build api/RegionalContactsApp.sln --no-restore --configuration Release
+      run: dotnet build api/RegionalRegionalContactsApp.sln --no-restore --configuration Release
 
     - name: Run tests with coverage
       run: |
