@@ -6,7 +6,36 @@ on:
       - main
 
 jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '8.0.x'  # Certifique-se de que a versão do .NET Core está correta
+
+    - name: Restore dependencies
+      run: dotnet restore
+
+    - name: Build solution
+      run: dotnet build --no-restore --configuration Release
+
+    - name: Run tests with coverage
+      run: |
+        dotnet test --no-build --configuration Release --collect:"XPlat Code Coverage" --results-directory ./TestResults
+
+    - name: Report coverage
+      uses: actions/upload-artifact@v2
+      with:
+        name: code-coverage
+        path: ./TestResults
+
   build:
+    needs: test
     runs-on: ubuntu-latest
 
     steps:
