@@ -39,10 +39,10 @@ namespace RegionalContactsApp.Application.Services
             }
 
             var existingContact = await _contactRepository.GetContactByEmailAsync(contact.Email);
-            if (existingContact != null)
-            {
-                throw new ValidationException("Email already in use.");
-            }
+            // if (existingContact != null)
+            // {
+            //     throw new ValidationException("Email already in use.");
+            // }
 
             await _contactRepository.AddAsync(contact);
         }
