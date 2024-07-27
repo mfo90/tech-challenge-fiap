@@ -25,6 +25,7 @@ FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 
 # Add wait-for-it script
 COPY ../wait-for-it.sh /usr/bin/wait-for-it
+RUN ls -l /usr/bin/wait-for-it
 RUN chmod +x /usr/bin/wait-for-it
 
 # Set the working directory in the image
