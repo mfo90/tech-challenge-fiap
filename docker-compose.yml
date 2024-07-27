@@ -33,8 +33,8 @@ services:
 
   angular:
     build:
-      context: .
-      dockerfile: regional-contacts-app/Dockerfile.angular
+      context: ./regional-contacts-app
+      dockerfile: Dockerfile.angular
     ports:
       - "4200:80"
     depends_on:
