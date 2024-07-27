@@ -18,8 +18,8 @@ jobs:
 
     - name: Build Docker images
       run: |
-        docker build --no-cache --pull -t api:latest -f ./api/Dockerfile.api .
-        docker build --no-cache --pull -t angular:latest -f ./regional-contacts-app/Dockerfile.angular .
+        docker build --no-cache --pull -t api:latest -f ./api/Dockerfile.api ./api
+        docker build --no-cache --pull -t angular:latest -f ./regional-contacts-app/Dockerfile.angular ./regional-contacts-app
 
     - name: Save Docker images to tar files
       run: |
