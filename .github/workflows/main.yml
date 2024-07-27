@@ -18,8 +18,6 @@ jobs:
 
     - name: Build Docker images
       run: |
-        ls -la
-        ls -la ./api
         docker build -t api:latest -f ./api/Dockerfile.api .
         docker build -t angular:latest -f ./regional-contacts-app/Dockerfile.angular .
 
