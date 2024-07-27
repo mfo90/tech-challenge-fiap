@@ -26,12 +26,20 @@ jobs:
         docker save api:latest -o api.tar
         docker save angular:latest -o angular.tar
 
+    - name: Create SSH key file
+      run: echo "${{ secrets.SERVER_SSH_KEY }}" > ~/.ssh/id_rsa
+      shell: bash
+
+    - name: Set permissions for SSH key file
+      run: chmod 600 ~/.ssh/id_rsa
+      shell: bash
+
     - name: Transfer Docker images to server
       uses: appleboy/scp-action@v0.1.0
       with:
         host: ${{ secrets.SERVER_IP }}
         username: ${{ secrets.SERVER_USER }}
-        key: ${{ secrets.SERVER_SSH_KEY }}
+        key_path: ~/.ssh/id_rsa
         source: "*.tar"
         target: "~/projects/fiap/"
 
@@ -40,7 +48,7 @@ jobs:
       with:
         host: ${{ secrets.SERVER_IP }}
         username: ${{ secrets.SERVER_USER }}
-        key: ${{ secrets.SERVER_SSH_KEY }}
+        key_path: ~/.ssh/id_rsa
         source: "."
         target: "~/projects/fiap/"
 
@@ -52,9 +60,17 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
+    - name: Create SSH key file
+      run: echo "${{ secrets.SERVER_SSH_KEY }}" > ~/.ssh/id_rsa
+      shell: bash
+
+    - name: Set permissions for SSH key file
+      run: chmod 600 ~/.ssh/id_rsa
+      shell: bash
+
     - name: Deploy to server
       run: |
-        ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
+        ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
           cd ~/projects/fiap
           docker load -i api.tar
           docker load -i angular.tar

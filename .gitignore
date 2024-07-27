@@ -18,3 +18,9 @@ obj/
 *.njsproj
 *.sln.docstates
 *.vsidx
+api/.vs/ProjectEvaluation/regionalregionalcontactsapp.metadata.v7.bin
+api/.vs/ProjectEvaluation/regionalregionalcontactsapp.projects.v7.bin
+api/.vs/RegionalRegionalContactsApp/config/applicationhost.config
+api/.vs/RegionalRegionalContactsApp/DesignTimeBuild/.dtbcache.v2
+api/.vs/RegionalRegionalContactsApp/v17/.futdcache.v2
+api/.vs/RegionalRegionalContactsApp/v17/DocumentLayout.json
