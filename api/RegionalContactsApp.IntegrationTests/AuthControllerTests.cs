@@ -8,11 +8,11 @@ using Xunit;
 
 namespace RegionalContactsApp.IntegrationTests
 {
-    public class AuthControllerTests : IClassFixture<WebApplicationFactory<RegionalContactsApp.API.Program>>
+    public class AuthControllerTests : IClassFixture<WebApplicationFactory<Program>>
     {
         private readonly HttpClient _client;
 
-        public AuthControllerTests(WebApplicationFactory<RegionalContactsApp.API.Program> factory)
+        public AuthControllerTests(WebApplicationFactory<Program> factory)
         {
             _client = factory.CreateClient();
         }
@@ -24,7 +24,7 @@ namespace RegionalContactsApp.IntegrationTests
             var loginModel = new
             {
                 Username = "admin",
-                Password = "123456"
+                Password = "1234567"
             };
 
             var content = new StringContent(JsonConvert.SerializeObject(loginModel), Encoding.UTF8, "application/json");
