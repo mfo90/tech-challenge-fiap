@@ -18,8 +18,8 @@ jobs:
 
     - name: Build Docker images
       run: |
-        docker build -t api:latest -f api/Dockerfile.api ./api
-        docker build -t angular:latest -f regional-contacts-app/Dockerfile.angular ./regional-contacts-app
+        docker build --no-cache --pull -t api:latest -f ./api/Dockerfile.api .
+        docker build --no-cache --pull -t angular:latest -f ./regional-contacts-app/Dockerfile.angular .
 
     - name: Save Docker images to tar files
       run: |
@@ -48,6 +48,12 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         source: "."
         target: "~/projects/fiap/"
+
+    - name: Clean up Docker cache
+      run: docker builder prune -f
+
+    - name: Clean up Docker system
+      run: docker system prune -af --volumes
 
   deploy:
     needs: build
