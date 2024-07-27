@@ -38,6 +38,10 @@ jobs:
       run: chmod 600 ~/.ssh/id_rsa
       shell: bash
 
+    - name: Test SSH connection
+      run: ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} 'echo SSH connection successful'
+      shell: bash
+
     - name: Transfer Docker images to server
       uses: appleboy/scp-action@v0.1.0
       with:
@@ -76,6 +80,10 @@ jobs:
       run: chmod 600 ~/.ssh/id_rsa
       shell: bash
 
+    - name: Test SSH connection
+      run: ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} 'echo SSH connection successful'
+      shell: bash
+
     - name: Deploy to server
       run: |
         ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
@@ -85,6 +93,4 @@ jobs:
           docker-compose down
           docker-compose up -d
         EOF
-      env:
-        SERVER_USER: ${{ secrets.SERVER_USER }}
-        SERVER_IP: ${{ secrets.SERVER_IP }}
+      shell: bash
