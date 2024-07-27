@@ -1,0 +1,46 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RegionalContactsApp.Domain", "RegionalContactsApp.Domain\RegionalContactsApp.Domain.csproj", "{D0F99A86-41CD-4F7D-833E-E555CAE2961C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RegionalContactsApp.Infrastructure", "RegionalContactsApp.Infrastructure\RegionalContactsApp.Infrastructure.csproj", "{4A741C1C-BEC7-416B-AB63-8F30FE74A6A9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RegionalContactsApp.Application", "RegionalContactsApp.Application\RegionalContactsApp.Application.csproj", "{19E20DE6-E293-4433-B3CD-75EDC448C71A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RegionalContactsApp.API", "RegionalContactsApp.API\RegionalContactsApp.API.csproj", "{EBD5D5FD-4F5C-47F3-9B87-7125072D4DBC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RegionalContactsApp.Tests", "RegionalContactsApp.Tests\RegionalContactsApp.Tests.csproj", "{AA873513-A83C-4F81-9608-5307EE90F1CA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D0F99A86-41CD-4F7D-833E-E555CAE2961C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0F99A86-41CD-4F7D-833E-E555CAE2961C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0F99A86-41CD-4F7D-833E-E555CAE2961C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0F99A86-41CD-4F7D-833E-E555CAE2961C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A741C1C-BEC7-416B-AB63-8F30FE74A6A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A741C1C-BEC7-416B-AB63-8F30FE74A6A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A741C1C-BEC7-416B-AB63-8F30FE74A6A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A741C1C-BEC7-416B-AB63-8F30FE74A6A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{19E20DE6-E293-4433-B3CD-75EDC448C71A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19E20DE6-E293-4433-B3CD-75EDC448C71A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{19E20DE6-E293-4433-B3CD-75EDC448C71A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{19E20DE6-E293-4433-B3CD-75EDC448C71A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EBD5D5FD-4F5C-47F3-9B87-7125072D4DBC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EBD5D5FD-4F5C-47F3-9B87-7125072D4DBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EBD5D5FD-4F5C-47F3-9B87-7125072D4DBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EBD5D5FD-4F5C-47F3-9B87-7125072D4DBC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AA873513-A83C-4F81-9608-5307EE90F1CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA873513-A83C-4F81-9608-5307EE90F1CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA873513-A83C-4F81-9608-5307EE90F1CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA873513-A83C-4F81-9608-5307EE90F1CA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

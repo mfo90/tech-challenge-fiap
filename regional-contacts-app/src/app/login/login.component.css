@@ -1,0 +1,26 @@
+/* Centralizar o cartão de login verticalmente e horizontalmente */
+.vh-100 {
+    height: 100vh;
+  }
+  
+  /* Adicionar sombra e bordas arredondadas ao cartão */
+  .card {
+    border-radius: 10px;
+  }
+  
+  /* Espaçamento e alinhamento para o título */
+  .card-title {
+    margin-bottom: 1.5rem;
+  }
+  
+  /* Melhorar a aparência do botão de login */
+  .btn-block {
+    display: block;
+    width: 100%;
+  }
+  
+  /* Adicionar margem superior ao botão de login */
+  .mt-3 {
+    margin-top: 1rem;
+  }
+  

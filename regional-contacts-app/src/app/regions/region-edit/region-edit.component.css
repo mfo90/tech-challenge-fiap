@@ -1,0 +1,32 @@
+.container {
+    max-width: 600px;
+    margin: auto;
+  }
+  
+  .card {
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  
+  .card-header {
+    background-color: #007bff;
+    color: #fff;
+  }
+  
+  .card-body {
+    padding: 2rem;
+  }
+  
+  .form-group label {
+    font-weight: bold;
+  }
+  
+  .btn-primary {
+    display: flex;
+    align-items: center;
+  }
+  
+  .btn-primary i {
+    margin-right: 0.5rem;
+  }
+  

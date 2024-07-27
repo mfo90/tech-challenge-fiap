@@ -1,0 +1,48 @@
+.container {
+  max-width: 900px;
+  margin: auto;
+}
+
+h1 {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.btn-primary {
+  display: flex;
+  align-items: center;
+}
+
+.btn-primary i {
+  margin-right: 0.5rem;
+}
+
+.table {
+  margin-top: 1.5rem;
+}
+
+.table thead {
+  background-color: #343a40;
+  color: #ffffff;
+}
+
+.table td, .table th {
+  vertical-align: middle;
+}
+
+.btn-sm {
+  display: flex;
+  align-items: center;
+}
+
+.btn-sm i {
+  margin-right: 0.3rem;
+}
+
+.btn-group .btn {
+  margin-right: 0.3rem;
+}
+
+.btn-group .btn:last-child {
+  margin-right: 0;
+}

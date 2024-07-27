@@ -1,0 +1,36 @@
+services:
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: matheus
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: contactsdb
+    ports:
+      - "5432:5432"
+
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: matheus@email.com
+      PGADMIN_DEFAULT_PASSWORD: 123456
+    ports:
+      - "5050:80"
+
+  api:
+    build: 
+      context: ./api
+      dockerfile: Dockerfile.api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ConnectionStrings__DefaultConnection=Server=db;Port=5432;Database=contactsdb;User Id=matheus;Password=123456;
+    ports:
+      - "5000:8080"
+    depends_on:
+      - db
+
+  angular:
+    build:
+      context: ./regional-contacts-app
+      dockerfile: Dockerfile.angular
+    ports:
+      - "4200:80"

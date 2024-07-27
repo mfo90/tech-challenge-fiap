@@ -1,0 +1,29 @@
+# Etapa de build
+FROM node:20 as build
+
+WORKDIR /app
+
+# Copiar package.json e package-lock.json
+COPY package*.json ./
+
+# Instalar dependências
+RUN npm install
+
+
+# Copiar o restante do código-fonte
+COPY . .
+
+# Executar o build de produção
+RUN npm run build -- --configuration production
+
+# Etapa de produção
+FROM nginx:alpine
+
+# Copiar os arquivos de build para o Nginx
+COPY --from=build /app/dist/regional-contacts-app/browser /usr/share/nginx/html
+
+# Expor a porta 80
+EXPOSE 80
+
+# Comando padrão para iniciar o Nginx
+CMD ["nginx", "-g", "daemon off;"]

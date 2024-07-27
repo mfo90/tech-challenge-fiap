@@ -1,0 +1,49 @@
+<div class="container mt-5">
+  <div class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+      <h1 class="mb-0">Adicionar Região</h1>
+    </div>
+    <div class="card-body">
+      <form (ngSubmit)="confirmAddRegion()">
+        <div class="form-group mb-3">
+          <label for="ddd">DDD</label>
+          <input type="number" max="99" maxlength="2" class="form-control" id="ddd" [(ngModel)]="region.ddd" name="ddd" required>
+        </div>
+        <div class="form-group mb-3">
+          <label for="name">Nome</label>
+          <input type="text" class="form-control" maxlength="100" id="name" [(ngModel)]="region.name" name="name" required>
+        </div>
+        <button type="submit" class="btn btn-primary"><i class="bi bi-plus-circle"></i> Adicionar</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de Confirmação -->
+<div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="confirmModalLabel">Confirmar</h5>
+        <button type="button" class="btn-close" (click)="closeModal()" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" *ngIf="!successMessage">
+        <p>Tem certeza de que deseja adicionar esta região?</p>
+        <ul class="list-group">
+          <li class="list-group-item"><strong>DDD:</strong> {{ regionToConfirm?.ddd }}</li>
+          <li class="list-group-item"><strong>Nome:</strong> {{ regionToConfirm?.name }}</li>
+        </ul>
+      </div>
+      <div class="modal-body" *ngIf="successMessage">
+        <div class="alert alert-success">
+          <i class="bi bi-check-circle"></i> {{ successMessage }}
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeModal()" *ngIf="!successMessage">Cancelar</button>
+        <button type="button" class="btn btn-primary" (click)="addRegion()" *ngIf="!successMessage">Adicionar</button>
+        <button type="button" class="btn btn-primary" (click)="closeModal()" *ngIf="successMessage">Fechar</button>
+      </div>
+    </div>
+  </div>
+</div>

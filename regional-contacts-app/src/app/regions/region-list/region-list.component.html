@@ -1,0 +1,35 @@
+<div class="container mt-5">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>Regiões</h1>
+    <a routerLink="add" class="btn btn-primary">
+      <i class="bi bi-plus-circle"></i> Adicionar Região
+    </a>
+  </div>
+  <div class="table-responsive">
+    <table class="table table-striped table-hover">
+      <thead class="thead-dark">
+        <tr>
+          <th>DDD</th>
+          <th>Nome</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let region of regions">
+          <td>{{ region.ddd }}</td>
+          <td>{{ region.name }}</td>
+          <td>
+            <div class="btn-group" role="group">
+              <a [routerLink]="['edit', region.ddd]" class="btn btn-warning btn-sm">
+                <i class="bi bi-pencil"></i> Editar
+              </a>
+              <button (click)="deleteRegion(region.ddd)" class="btn btn-danger btn-sm">
+                <i class="bi bi-trash"></i> Deletar
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

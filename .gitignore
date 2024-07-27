@@ -1,0 +1,20 @@
+# Ignorar diretórios de compilação e arquivos de saída
+bin/
+obj/
+
+# Ignorar arquivos de dependência do NuGet
+*.dll
+*.exe
+*.pdb
+*.dll.config
+
+# Ignorar arquivos de configuração de usuário
+*.user
+
+# Ignorar arquivos do Visual Studio
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln.docstates
+*.vsidx

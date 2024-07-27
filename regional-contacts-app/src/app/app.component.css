@@ -1,0 +1,21 @@
+.navbar {
+    padding: 10px;
+    background-color: #343a40; /* Navbar dark color */
+  }
+  .navbar-brand, .nav-link {
+    color: #ffffff !important; /* White text */
+  }
+  .nav-link:hover {
+    color: #ffdd57 !important; /* Gold text on hover */
+  }
+  .container {
+    margin-top: 2rem;
+  }
+  .navbar-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+  .nav-item {
+    margin-left: 1rem;
+  }
+  
