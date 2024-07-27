@@ -30,11 +30,11 @@ jobs:
       run: mkdir -p ~/.ssh
       shell: bash
 
-    - name: Create SSH key file
+    - name: Add SSH key
       run: echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
       shell: bash
 
-    - name: Set permissions for SSH key file
+    - name: Set permissions for SSH key
       run: chmod 600 ~/.ssh/id_rsa
       shell: bash
 
@@ -72,11 +72,11 @@ jobs:
       run: mkdir -p ~/.ssh
       shell: bash
 
-    - name: Create SSH key file
+    - name: Add SSH key
       run: echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
       shell: bash
 
-    - name: Set permissions for SSH key file
+    - name: Set permissions for SSH key
       run: chmod 600 ~/.ssh/id_rsa
       shell: bash
 
