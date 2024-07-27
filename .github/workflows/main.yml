@@ -26,6 +26,11 @@ jobs:
         docker save api:latest -o api.tar
         docker save angular:latest -o angular.tar
 
+    - name: Set permissions for tar files
+      run: |
+        chmod 644 api.tar
+        chmod 644 angular.tar
+
     - name: Transfer Docker images to server
       uses: appleboy/scp-action@master
       with:
