@@ -18,8 +18,8 @@ jobs:
 
     - name: Build Docker images
       run: |
-        docker build -t api:latest -f ./api/Dockerfile.api .
-        docker build -t angular:latest -f ./regional-contacts-app/Dockerfile.angular .
+        docker build -t api:latest -f api/Dockerfile.api ./api
+        docker build -t angular:latest -f regional-contacts-app/Dockerfile.angular ./regional-contacts-app
 
     - name: Save Docker images to tar files
       run: |
