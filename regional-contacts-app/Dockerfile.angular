@@ -1,29 +1,29 @@
-# Etapa de build
-FROM node:20 as build
+# Estágio de build
+FROM node:20 AS build
 
+# Definir o diretório de trabalho no contêiner
 WORKDIR /app
 
-# Copiar package.json e package-lock.json
-COPY package*.json ./
+# Copiar os arquivos de configuração do npm
+COPY regional-contacts-app/package*.json ./
 
-# Instalar dependências
+# Instalar as dependências
 RUN npm install
 
+# Copiar todos os arquivos do projeto
+COPY regional-contacts-app/ .
 
-# Copiar o restante do código-fonte
-COPY . .
+# Compilar o projeto Angular
+RUN npm run build --prod
 
-# Executar o build de produção
-RUN npm run build -- --configuration production
-
-# Etapa de produção
+# Estágio de produção
 FROM nginx:alpine
 
-# Copiar os arquivos de build para o Nginx
-COPY --from=build /app/dist/regional-contacts-app/browser /usr/share/nginx/html
+# Copiar os arquivos compilados do Angular para o NGINX
+COPY --from=build /app/dist /usr/share/nginx/html
 
-# Expor a porta 80
+# Expor a porta 80 para o NGINX
 EXPOSE 80
 
-# Comando padrão para iniciar o Nginx
+# Comando para iniciar o NGINX
 CMD ["nginx", "-g", "daemon off;"]
