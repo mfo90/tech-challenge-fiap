@@ -39,10 +39,10 @@ namespace RegionalContactsApp.Application.Services
             }
 
             var existingContact = await _contactRepository.GetContactByEmailAsync(contact.Email);
-            // if (existingContact != null)
-            // {
-            //     throw new ValidationException("Email already in use.");
-            // }
+            if (existingContact != null)
+            {
+                throw new ValidationException("Email already in use.");
+            }
 
             await _contactRepository.AddAsync(contact);
         }
@@ -80,10 +80,10 @@ namespace RegionalContactsApp.Application.Services
             {
                 throw new ValidationException("Name cannot exceed 100 characters.");
             }
-            if (!IsValidEmail(contact.Email))
-            {
-                throw new ValidationException("Invalid email format.");
-            }
+            // if (!IsValidEmail(contact.Email))
+            // {
+            //     throw new ValidationException("Invalid email format.");
+            // }
             if (contact.Email.Length > 100)
             {
                 throw new ValidationException("Email cannot exceed 100 characters.");
