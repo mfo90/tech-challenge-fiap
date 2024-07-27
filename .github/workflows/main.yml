@@ -26,37 +26,21 @@ jobs:
         docker save api:latest -o api.tar
         docker save angular:latest -o angular.tar
 
-    - name: Create SSH directory
-      run: mkdir -p ~/.ssh
-      shell: bash
-
-    - name: Add SSH key
-      run: echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-      shell: bash
-
-    - name: Set permissions for SSH key
-      run: chmod 600 ~/.ssh/id_rsa
-      shell: bash
-
-    - name: Test SSH connection
-      run: ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} 'echo SSH connection successful'
-      shell: bash
-
     - name: Transfer Docker images to server
-      uses: appleboy/scp-action@v0.1.0
+      uses: appleboy/scp-action@master
       with:
         host: ${{ secrets.SERVER_IP }}
         username: ${{ secrets.SERVER_USER }}
-        key_path: ~/.ssh/id_rsa
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
         source: "*.tar"
         target: "~/projects/fiap/"
 
     - name: Transfer project files to server
-      uses: appleboy/scp-action@v0.1.0
+      uses: appleboy/scp-action@master
       with:
         host: ${{ secrets.SERVER_IP }}
         username: ${{ secrets.SERVER_USER }}
-        key_path: ~/.ssh/id_rsa
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
         source: "."
         target: "~/projects/fiap/"
 
@@ -68,29 +52,15 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Create SSH directory
-      run: mkdir -p ~/.ssh
-      shell: bash
-
-    - name: Add SSH key
-      run: echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-      shell: bash
-
-    - name: Set permissions for SSH key
-      run: chmod 600 ~/.ssh/id_rsa
-      shell: bash
-
-    - name: Test SSH connection
-      run: ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} 'echo SSH connection successful'
-      shell: bash
-
     - name: Deploy to server
-      run: |
-        ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SERVER_IP }}
+        username: ${{ secrets.SERVER_USER }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        script: |
           cd ~/projects/fiap
           docker load -i api.tar
           docker load -i angular.tar
           docker-compose down
           docker-compose up -d
-        EOF
-      shell: bash
