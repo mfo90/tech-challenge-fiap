@@ -5,14 +5,14 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
 # Copy the .csproj files and restore dependencies
-COPY api/RegionalContactsApp.API/*.csproj ./RegionalContactsApp.API/
-COPY api/RegionalContactsApp.Application/*.csproj ./RegionalContactsApp.Application/
-COPY api/RegionalContactsApp.Domain/*.csproj ./RegionalContactsApp.Domain/
-COPY api/RegionalContactsApp.Infrastructure/*.csproj ./RegionalContactsApp.Infrastructure/
+COPY RegionalContactsApp.API/*.csproj ./RegionalContactsApp.API/
+COPY RegionalContactsApp.Application/*.csproj ./RegionalContactsApp.Application/
+COPY RegionalContactsApp.Domain/*.csproj ./RegionalContactsApp.Domain/
+COPY RegionalContactsApp.Infrastructure/*.csproj ./RegionalContactsApp.Infrastructure/
 RUN dotnet restore RegionalContactsApp.API/RegionalContactsApp.API.csproj
 
 # Copy all the solution files and build the application
-COPY api/ .
+COPY . .
 WORKDIR /src/RegionalContactsApp.API
 RUN dotnet build -c Release -o /app/build
 
@@ -24,7 +24,7 @@ RUN dotnet publish -c Release -o /app/publish
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 
 # Add wait-for-it script
-COPY ../wait-for-it.sh /usr/bin/wait-for-it
+COPY wait-for-it.sh /usr/bin/wait-for-it
 RUN ls -l /usr/bin/wait-for-it
 RUN chmod +x /usr/bin/wait-for-it
 

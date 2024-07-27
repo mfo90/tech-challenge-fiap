@@ -13,16 +13,13 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: List project files
-      run: |
-        ls -l ./api
-        ls -l .
-
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v1
 
     - name: Build Docker images
       run: |
+        ls -la
+        ls -la ./api
         docker build -t api:latest -f ./api/Dockerfile.api .
         docker build -t angular:latest -f ./regional-contacts-app/Dockerfile.angular .
 
