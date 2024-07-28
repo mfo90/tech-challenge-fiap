@@ -9,6 +9,21 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
+    services:
+      db:
+        image: postgres:latest
+        env:
+          POSTGRES_USER: matheus
+          POSTGRES_PASSWORD: 123456
+          POSTGRES_DB: contactsdb
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U matheus -d contactsdb"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
@@ -18,21 +33,41 @@ jobs:
       with:
         dotnet-version: '8.0.x'  # Certifique-se de que a versão do .NET Core está correta
 
+    - name: Wait for Postgres
+      run: |
+        until pg_isready -h localhost -p 5432 -U matheus; do
+          echo "Waiting for postgres...";
+          sleep 5;
+        done
+
+    - name: Initialize database
+      run: dotnet run --project api/RegionalContactsApp.API/RegionalContactsApp.API.csproj
+
     - name: Restore dependencies
       run: dotnet restore api/RegionalRegionalContactsApp.sln
 
     - name: Build solution
       run: dotnet build api/RegionalRegionalContactsApp.sln --no-restore --configuration Release
 
-    - name: Run tests with coverage
+    - name: Run unit tests with coverage
       run: |
-        dotnet test api/RegionalContactsApp.Tests/RegionalContactsApp.Tests.csproj --no-build --configuration Release --collect:"XPlat Code Coverage" --results-directory ./TestResults
+        dotnet test api/RegionalContactsApp.Tests/RegionalContactsApp.Tests.csproj --no-build --configuration Release --collect:"XPlat Code Coverage" --results-directory ./TestResults/UnitTests
 
-    - name: Report coverage
+    - name: Run integration tests with coverage
+      run: |
+        dotnet test api/RegionalContactsApp.IntegrationTests/RegionalContactsApp.IntegrationTests.csproj --no-build --configuration Release --collect:"XPlat Code Coverage" --results-directory ./TestResults/IntegrationTests
+
+    - name: Report unit test coverage
       uses: actions/upload-artifact@v2
       with:
-        name: code-coverage
-        path: ./TestResults
+        name: unit-test-coverage
+        path: ./TestResults/UnitTests
+
+    - name: Report integration test coverage
+      uses: actions/upload-artifact@v2
+      with:
+        name: integration-test-coverage
+        path: ./TestResults/IntegrationTests
 
   build:
     needs: test
