@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Npgsql;
+using Prometheus;
 using RegionalContactsApp.Application.Services;
 using RegionalContactsApp.Domain.Interfaces;
 using RegionalContactsApp.Infrastructure.Repositories;
@@ -9,134 +10,142 @@ using System.Data;
 using System.Security.Cryptography;
 using System.Text;
 
-var builder = WebApplication.CreateBuilder(args);
-
-// Adicione a configuraÁ„o da string de conex„o
-string connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ??
-    throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-
-// Adicione serviÁos ‡ coleÁ„o de injeÁ„o de dependÍncia
-builder.Services.AddScoped<IContactRepository, ContactRepository>();
-builder.Services.AddScoped<IRegionRepository, RegionRepository>();
-builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IDatabaseInitializer, DatabaseInitializer>();
-
-builder.Services.AddScoped<IContactService, ContactService>();
-builder.Services.AddScoped<IRegionService, RegionService>();
-builder.Services.AddScoped<IUserService, UserService>();
-
-// Adicione a conex„o do banco de dados como um serviÁo
-builder.Services.AddScoped<IDbConnection>(sp => new NpgsqlConnection(connectionString));
-
-// Adicione a configuraÁ„o da string de conex„o
-builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
-
-// Adicione suporte para controllers
-builder.Services.AddControllers();
-
-// Configure CORS, se necess·rio
-builder.Services.AddCors(options =>
+public class Program
 {
-    options.AddPolicy("AllowAll", builder =>
+    public static void Main(string[] args)
     {
-        builder.AllowAnyOrigin()
-               .AllowAnyMethod()
-               .AllowAnyHeader();
-    });
-});
+        var builder = WebApplication.CreateBuilder(args);
 
-// Adicione a autenticaÁ„o JWT
-var key = Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Key"]);
-builder.Services.AddAuthentication(options =>
-{
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-}).AddJwtBearer(options =>
-{
-    options.RequireHttpsMetadata = false;
-    options.SaveToken = true;
-    options.TokenValidationParameters = new TokenValidationParameters
-    {
-        ValidateIssuer = true,
-        ValidateAudience = true,
-        ValidateLifetime = true,
-        ValidateIssuerSigningKey = true,
-        ValidIssuer = builder.Configuration["Jwt:Issuer"],
-        ValidAudience = builder.Configuration["Jwt:Issuer"],
-        IssuerSigningKey = new SymmetricSecurityKey(key)
-    };
-});
+        // Adicione a configura√ß√£o da string de conex√£o
+        string connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ??
+            throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
-// Configure Swagger/OpenAPI
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c =>
-{
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Regional Contacts API", Version = "v1" });
-    // Inclua coment·rios do XML (se houver) para melhorar a documentaÁ„o do Swagger
-    var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-    if (File.Exists(xmlPath)) // Verifique se o arquivo XML existe
-    {
-        c.IncludeXmlComments(xmlPath);
-    }
-    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-    {
-        Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
-        Name = "Authorization",
-        In = ParameterLocation.Header,
-        Type = SecuritySchemeType.ApiKey,
-        Scheme = "Bearer"
-    });
-    c.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
+        // Adicione servi√ßos √† cole√ß√£o de inje√ß√£o de depend√™ncia
+        builder.Services.AddScoped<IContactRepository, ContactRepository>();
+        builder.Services.AddScoped<IRegionRepository, RegionRepository>();
+        builder.Services.AddScoped<IUserRepository, UserRepository>();
+        builder.Services.AddScoped<IDatabaseInitializer, DatabaseInitializer>();
+
+        builder.Services.AddScoped<IContactService, ContactService>();
+        builder.Services.AddScoped<IRegionService, RegionService>();
+        builder.Services.AddScoped<IUserService, UserService>();
+
+        // Adicione a conex√£o do banco de dados como um servi√ßo
+        builder.Services.AddScoped<IDbConnection>(sp => new NpgsqlConnection(connectionString));
+
+        // Adicione a configura√ß√£o da string de conex√£o
+        builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
+
+        // Adicione suporte para controllers
+        builder.Services.AddControllers();
+
+        // Configure CORS, se necess√°rio
+        builder.Services.AddCors(options =>
         {
-            new OpenApiSecurityScheme
+            options.AddPolicy("AllowAll", builder =>
             {
-                Reference = new OpenApiReference
+                builder.AllowAnyOrigin()
+                       .AllowAnyMethod()
+                       .AllowAnyHeader();
+            });
+        });
+
+        // Adicione a autentica√ß√£o JWT
+        var key = Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Key"]);
+        builder.Services.AddAuthentication(options =>
+        {
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        }).AddJwtBearer(options =>
+        {
+            options.RequireHttpsMetadata = false;
+            options.SaveToken = true;
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = builder.Configuration["Jwt:Issuer"],
+                ValidAudience = builder.Configuration["Jwt:Issuer"],
+                IssuerSigningKey = new SymmetricSecurityKey(key)
+            };
+        });
+
+        // Configure Swagger/OpenAPI
+        builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddSwaggerGen(c =>
+        {
+            c.SwaggerDoc("v1", new OpenApiInfo { Title = "Regional Contacts API", Version = "v1" });
+            var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+            if (File.Exists(xmlPath))
+            {
+                c.IncludeXmlComments(xmlPath);
+            }
+            c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+            {
+                Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+                Name = "Authorization",
+                In = ParameterLocation.Header,
+                Type = SecuritySchemeType.ApiKey,
+                Scheme = "Bearer"
+            });
+            c.AddSecurityRequirement(new OpenApiSecurityRequirement
+            {
                 {
-                    Id = "Bearer",
-                    Type = ReferenceType.SecurityScheme
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Id = "Bearer",
+                            Type = ReferenceType.SecurityScheme
+                        }
+                    },
+                    new List<string>()
                 }
-            },
-            new List<string>()
+            });
+        });
+
+        // Adicione a autoriza√ß√£o e defina uma pol√≠tica para administradores
+        builder.Services.AddAuthorization(options =>
+        {
+            options.AddPolicy("AdminPolicy", policy => policy.RequireRole("Admin"));
+        });
+
+        var app = builder.Build();
+
+        app.UseMetricServer(); // Expor m√©tricas em /metrics
+        app.UseHttpMetrics();  // Coletar m√©tricas HTTP
+
+        // Inicialize o banco de dados
+        using (var scope = app.Services.CreateScope())
+        {
+            var dbInitializer = scope.ServiceProvider.GetRequiredService<IDatabaseInitializer>();
+            dbInitializer.Initialize();
         }
-    });
-});
 
-// Adicione a autorizaÁ„o e defina uma polÌtica para administradores
-builder.Services.AddAuthorization(options =>
-{
-    options.AddPolicy("AdminPolicy", policy => policy.RequireRole("Admin"));
-});
+        // Configure o pipeline de requisi√ß√£o HTTP
+        app.UseSwagger();
+        app.UseSwaggerUI(c =>
+        {
+            c.SwaggerEndpoint("/swagger/v1/swagger.json", "Regional Contacts API v1");
+        });
 
-var app = builder.Build();
+        // Configure CORS antes da autentica√ß√£o e autoriza√ß√£o
+        app.UseCors("AllowAll");
 
-// Inicialize o banco de dados
-using (var scope = app.Services.CreateScope())
-{
-    var dbInitializer = scope.ServiceProvider.GetRequiredService<IDatabaseInitializer>();
-    dbInitializer.Initialize();
+        app.UseRouting();
+
+        app.UseAuthentication();
+        app.UseAuthorization();
+
+        // Configure o roteamento e suporte para controllers
+        app.UseEndpoints(endpoints =>
+        {
+            endpoints.MapControllers();
+        });
+
+        app.Run();
+    }
 }
-
-// Configure o pipeline de requisiÁ„o HTTP
-app.UseSwagger();
-app.UseSwaggerUI(c =>
-{
-    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Regional Contacts API v1");
-});
-
-// Configure CORS antes da autenticaÁ„o e autorizaÁ„o
-app.UseCors("AllowAll");
-
-app.UseRouting();
-
-app.UseAuthentication();
-app.UseAuthorization();
-
-// Configure o roteamento e suporte para controllers
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapControllers();
-});
-
-app.Run();

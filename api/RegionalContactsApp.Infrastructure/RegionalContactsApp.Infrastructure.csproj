@@ -1,11 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <PackageReference Include="Dapper" Version="2.1.35" />
+    <ProjectReference Include="..\RegionalContactsApp.Domain\RegionalContactsApp.Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\RegionalContactsApp.Domain\RegionalContactsApp.Domain.csproj" />
+    <PackageReference Include="Dapper" Version="2.1.44" />
   </ItemGroup>
 
   <PropertyGroup>
