@@ -41,7 +41,9 @@ jobs:
         done
 
     - name: Initialize database
-      run: dotnet run --project api/RegionalContactsApp.API/RegionalContactsApp.API.csproj
+      run: |
+        chmod +x initialize_db.sh
+        ./initialize_db.sh
 
     - name: Restore dependencies
       run: dotnet restore api/RegionalRegionalContactsApp.sln
