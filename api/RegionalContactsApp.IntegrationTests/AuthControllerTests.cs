@@ -24,7 +24,7 @@ namespace RegionalContactsApp.IntegrationTests
             var loginModel = new
             {
                 Username = "admin",
-                Password = "1234567"
+                Password = "123456"
             };
 
             var content = new StringContent(JsonConvert.SerializeObject(loginModel), Encoding.UTF8, "application/json");
