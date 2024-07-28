@@ -10,6 +10,8 @@ services:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+    networks:
+      - monitoring_network
 
   pgadmin:
     image: dpage/pgadmin4
@@ -20,6 +22,8 @@ services:
       - "5050:80"
     depends_on:
       - db
+    networks:
+      - monitoring_network
 
   api:
     build: 
@@ -32,6 +36,10 @@ services:
       - "5000:8080"
     depends_on:
       - db
+    networks:
+      - monitoring_network
+    labels:
+      - "prometheus-job=api"
 
   angular:
     build:
@@ -41,6 +49,12 @@ services:
       - "4200:80"
     depends_on:
       - api
+    networks:
+      - monitoring_network
 
 volumes:
   pgdata:
+
+networks:
+  monitoring_network:
+    external: true

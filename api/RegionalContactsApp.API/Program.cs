@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Npgsql;
+using Prometheus;
 using RegionalContactsApp.Application.Services;
 using RegionalContactsApp.Domain.Interfaces;
 using RegionalContactsApp.Infrastructure.Repositories;
@@ -113,6 +114,9 @@ public class Program
         });
 
         var app = builder.Build();
+
+        app.UseMetricServer(); // Expor métricas em /metrics
+        app.UseHttpMetrics();  // Coletar métricas HTTP
 
         // Inicialize o banco de dados
         using (var scope = app.Services.CreateScope())
