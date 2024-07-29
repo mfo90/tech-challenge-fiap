@@ -46,16 +46,18 @@ jobs:
         ./initialize_db.sh
 
     - name: Restaurar dependências
-      run: dotnet restore api/RegionalRegionalContactsApp.sln
+      run: dotnet restore api/RegionalContactsApp.sln
 
     - name: Compilar solução
-      run: dotnet build api/RegionalRegionalContactsApp.sln --no-restore --configuration Release
+      run: dotnet build api/RegionalContactsApp.sln --no-restore --configuration Release
 
     - name: Executar testes unitários com cobertura
       run: |
         dotnet test api/RegionalContactsApp.Tests/RegionalContactsApp.Tests.csproj --no-build --configuration Release --collect:"XPlat Code Coverage" --results-directory ./TestResults/UnitTests
 
     - name: Executar testes de integração com cobertura
+      env:
+        ConnectionStrings__DefaultConnection: Server=localhost;Port=5432;Database=contactsdb;User Id=matheus;Password=123456;
       run: |
         dotnet test api/RegionalContactsApp.IntegrationTests/RegionalContactsApp.IntegrationTests.csproj --no-build --configuration Release --collect:"XPlat Code Coverage" --results-directory ./TestResults/IntegrationTests
 
