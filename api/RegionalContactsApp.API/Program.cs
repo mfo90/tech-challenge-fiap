@@ -40,7 +40,7 @@ public class Program
         builder.Services.AddControllers();
 
         builder.WebHost.UseKestrel()
-            .UseUrls("http://*:5000");
+            .UseUrls("http://*:8080");
 
         // Configure CORS, se necessário
         builder.Services.AddCors(options =>
