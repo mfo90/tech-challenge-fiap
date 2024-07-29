@@ -39,6 +39,9 @@ public class Program
         // Adicione suporte para controllers
         builder.Services.AddControllers();
 
+        builder.WebHost.UseKestrel()
+            .UseUrls("http://*:5000");
+
         // Configure CORS, se necessário
         builder.Services.AddCors(options =>
         {
