@@ -46,10 +46,10 @@ jobs:
         ./initialize_db.sh
 
     - name: Restaurar dependências
-      run: dotnet restore api/RegionalContactsApp.sln
+      run: dotnet restore api/RegionalRegionalContactsApp.sln
 
     - name: Compilar solução
-      run: dotnet build api/RegionalContactsApp.sln --no-restore --configuration Release
+      run: dotnet build api/RegionalRegionalContactsApp.sln --no-restore --configuration Release
 
     - name: Executar testes unitários com cobertura
       run: |
