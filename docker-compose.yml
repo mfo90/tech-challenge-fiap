@@ -33,7 +33,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Production
       - ConnectionStrings__DefaultConnection=Server=db;Port=5432;Database=contactsdb;User Id=matheus;Password=123456;
     ports:
-      - "5000:8080"
+      - "5000:5000"
     depends_on:
       - db
     networks:
@@ -57,4 +57,4 @@ volumes:
 
 networks:
   monitoring_network:
-    driver: bridge
+    external: true
