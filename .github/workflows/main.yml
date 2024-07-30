@@ -85,43 +85,34 @@ jobs:
       uses: docker/setup-buildx-action@v1
 
     - name: Construir imagens Docker
-      run: |
-        docker build --no-cache --pull -t api:latest -f ./api/Dockerfile.api ./api
-        docker build --no-cache --pull -t angular:latest -f ./regional-contacts-app/Dockerfile.angular ./regional-contacts-app
-      shell: powershell
+      run: docker build --no-cache --pull -t api:latest -f ./api/Dockerfile.api ./api
+           docker build --no-cache --pull -t angular:latest -f ./regional-contacts-app/Dockerfile.angular ./regional-contacts-app
 
     - name: Salvar imagens Docker em arquivos tar
-      run: |
-        docker save api:latest -o api.tar
-        docker save angular:latest -o angular.tar
-      shell: powershell
+      run: docker save api:latest -o api.tar
+           docker save angular:latest -o angular.tar
 
     - name: Criar diretório para os arquivos tar, se não existir
       run: |
         if (!(Test-Path -Path "C:\projects\fiap")) {
           New-Item -Path "C:\projects\fiap" -ItemType Directory
         }
-      shell: powershell
 
     - name: Definir permissões para arquivos tar
       run: |
         icacls api.tar /grant Everyone:F
         icacls angular.tar /grant Everyone:F
-      shell: powershell
 
     - name: Transferir imagens Docker para o diretório local
       run: |
         Move-Item api.tar C:\projects\fiap\
         Move-Item angular.tar C:\projects\fiap\
-      shell: powershell
 
     - name: Limpar cache do Docker
       run: docker builder prune -f
-      shell: powershell
 
     - name: Limpar sistema Docker
       run: docker system prune -af --volumes
-      shell: powershell
 
   deploy:
     needs: build
@@ -138,4 +129,3 @@ jobs:
         docker load -i angular.tar
         docker-compose down
         docker-compose up -d
-      shell: powershell
