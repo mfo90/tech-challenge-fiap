@@ -91,10 +91,10 @@ jobs:
         xcopy . C:\projects\fiap /E /I /Y
       shell: cmd
 
-    - name: Converter finais de linha para Unix
+    - name: Remover caracteres de retorno de carro
       run: |
-        sed -i 's/\r$//' C:/projects/fiap/wait-for-it.sh
-      shell: bash
+        powershell -Command "(Get-Content -path 'C:\projects\fiap\wait-for-it.sh') -replace '`r', '' | Set-Content -path 'C:\projects\fiap\wait-for-it.sh'"
+      shell: cmd
 
     - name: Configurar Docker Buildx
       uses: docker/setup-buildx-action@v1
