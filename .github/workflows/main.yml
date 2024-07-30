@@ -115,8 +115,9 @@ jobs:
 
     steps:
     - name: Criar rede Docker, se não existir
-      run: docker network create monitoring_network || true
-      shell: cmd
+      run: |
+        docker network ls | Select-String "monitoring_network" || docker network create monitoring_network
+      shell: powershell
 
     - name: Fazer deploy localmente
       run: |
