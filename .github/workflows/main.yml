@@ -91,6 +91,13 @@ jobs:
         xcopy . C:\projects\fiap /E /I /Y
       shell: cmd
 
+    - name: Converter finais de linha para Unix
+      run: |
+        git config --global core.autocrlf input
+        git add --renormalize .
+        git commit -m "Normalize line endings to LF"
+      shell: bash
+
     - name: Configurar Docker Buildx
       uses: docker/setup-buildx-action@v1
 
