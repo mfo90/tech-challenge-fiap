@@ -3,11 +3,11 @@ name: CI/CD Pipeline
 on:
   push:
     branches:
-      - feature/workflow-local
+      - main
 
 jobs:
   test:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
 
     services:
       db:
@@ -35,14 +35,15 @@ jobs:
 
     - name: Esperar pelo Postgres
       run: |
-        while (!(pg_isready -h localhost -p 5432 -U matheus))
-        do
-          echo "Esperando pelo Postgres..."
-          Start-Sleep -Seconds 5
+        until pg_isready -h localhost -p 5432 -U matheus; do
+          echo "Esperando pelo Postgres...";
+          sleep 5;
         done
 
     - name: Inicializar banco de dados
-      run: .\initialize_db.ps1
+      run: |
+        chmod +x initialize_db.sh
+        ./initialize_db.sh
 
     - name: Restaurar dependências
       run: dotnet restore api/RegionalRegionalContactsApp.sln
