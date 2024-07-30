@@ -101,14 +101,10 @@ jobs:
         if not exist C:\projects\fiap mkdir C:\projects\fiap
       shell: cmd
 
-    - name: Transferir imagens Docker para o diretório local
+    - name: Transferir imagens Docker e docker-compose.yml para o diretório local
       run: |
         move api.tar C:\projects\fiap\
         move angular.tar C:\projects\fiap\
-      shell: cmd
-
-    - name: Transferir docker-compose.yml para o diretório local
-      run: |
         copy docker-compose.yml C:\projects\fiap\
       shell: cmd
 
@@ -127,11 +123,6 @@ jobs:
     steps:
     - name: Fazer checkout do código
       uses: actions/checkout@v2
-
-    - name: Transferir docker-compose.yml para o diretório de destino
-      run: |
-        copy docker-compose.yml C:\projects\fiap\
-      shell: cmd
 
     - name: Fazer deploy localmente
       run: |
