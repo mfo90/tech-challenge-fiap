@@ -101,12 +101,6 @@ jobs:
         if not exist C:\projects\fiap mkdir C:\projects\fiap
       shell: cmd
 
-    - name: Definir permissões para arquivos tar
-      run: |
-        icacls api.tar /grant Everyone:F
-        icacls angular.tar /grant Everyone:F
-      shell: cmd
-
     - name: Transferir imagens Docker para o diretório local
       run: |
         move api.tar C:\projects\fiap\
