@@ -85,12 +85,14 @@ jobs:
       uses: docker/setup-buildx-action@v1
 
     - name: Construir imagens Docker
-      run: docker build --no-cache --pull -t api:latest -f ./api/Dockerfile.api ./api
-           docker build --no-cache --pull -t angular:latest -f ./regional-contacts-app/Dockerfile.angular ./regional-contacts-app
+      run: |
+        docker build --no-cache --pull -t api:latest -f ./api/Dockerfile.api ./api
+        docker build --no-cache --pull -t angular:latest -f ./regional-contacts-app/Dockerfile.angular ./regional-contacts-app
 
     - name: Salvar imagens Docker em arquivos tar
-      run: docker save api:latest -o api.tar
-           docker save angular:latest -o angular.tar
+      run: |
+        docker save api:latest -o api.tar
+        docker save angular:latest -o angular.tar
 
     - name: Criar diretório para os arquivos tar, se não existir
       run: |
