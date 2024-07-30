@@ -114,6 +114,10 @@ jobs:
     runs-on: self-hosted
 
     steps:
+    - name: Criar rede Docker, se não existir
+      run: docker network create monitoring_network || true
+      shell: cmd
+
     - name: Fazer deploy localmente
       run: |
         cd C:\projects\fiap
