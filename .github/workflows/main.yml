@@ -114,13 +114,6 @@ jobs:
     runs-on: self-hosted
 
     steps:
-    - name: Criar rede Docker, se não existir
-      run: |
-        if (!(docker network ls | Select-String "monitoring_network")) {
-          docker network create monitoring_network
-        }
-      shell: powershell
-
     - name: Fazer deploy localmente
       run: |
         cd C:\projects\fiap
