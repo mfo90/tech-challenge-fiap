@@ -12,6 +12,11 @@ services:
       - pgdata:/var/lib/postgresql/data
     networks:
       - monitoring_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U matheus -d contactsdb"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   pgadmin:
     image: dpage/pgadmin4
@@ -21,7 +26,8 @@ services:
     ports:
       - "5050:80"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     networks:
       - monitoring_network
 
@@ -35,7 +41,8 @@ services:
     ports:
       - "8081:8081"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     networks:
       - monitoring_network
     labels:
@@ -48,7 +55,8 @@ services:
     ports:
       - "4200:80"
     depends_on:
-      - api
+      api:
+        condition: service_started
     networks:
       - monitoring_network
 
@@ -59,7 +67,8 @@ services:
     ports:
       - "9187:9187"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     networks:
       - monitoring_network
 
