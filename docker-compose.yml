@@ -33,7 +33,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Production
       - ConnectionStrings__DefaultConnection=Server=db;Port=5432;Database=contactsdb;User Id=matheus;Password=123456;
     ports:
-      - "8081:8081"  
+      - "8081:8081"
     depends_on:
       - db
     networks:
@@ -49,6 +49,17 @@ services:
       - "4200:80"
     depends_on:
       - api
+    networks:
+      - monitoring_network
+
+  postgres-exporter:
+    image: prometheuscommunity/postgres-exporter
+    environment:
+      DATA_SOURCE_NAME: "postgresql://matheus:123456@db:5432/contactsdb?sslmode=disable"
+    ports:
+      - "9187:9187"
+    depends_on:
+      - db
     networks:
       - monitoring_network
 
