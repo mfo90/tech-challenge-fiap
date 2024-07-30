@@ -88,7 +88,7 @@ jobs:
 
     - name: Transferir repositório para o diretório local
       run: |
-        xcopy . C:\projects\fiap /E /I
+        xcopy . C:\projects\fiap /E /I /Y
       shell: cmd
 
     - name: Configurar Docker Buildx
