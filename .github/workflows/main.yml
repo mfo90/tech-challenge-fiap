@@ -107,6 +107,11 @@ jobs:
         move angular.tar C:\projects\fiap\
       shell: cmd
 
+    - name: Transferir docker-compose.yml para o diretório local
+      run: |
+        copy docker-compose.yml C:\projects\fiap\
+      shell: cmd
+
     - name: Limpar cache do Docker
       run: docker builder prune -f
       shell: cmd
