@@ -12,6 +12,7 @@ services:
       - pgdata:/var/lib/postgresql/data
     networks:
       - monitoring_network
+      
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U matheus -d contactsdb"]
       interval: 10s
