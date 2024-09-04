@@ -9,7 +9,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace RegionalContactsApp.API.Controllers
+namespace AuthService.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

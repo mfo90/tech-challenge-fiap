@@ -1,6 +1,0 @@
-@RegionalContactsApp.API_HostAddress = http://localhost:5233
-
-GET {{RegionalContactsApp.API_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

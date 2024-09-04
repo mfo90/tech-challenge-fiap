@@ -3,25 +3,28 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RegionalContactsApp.Domain", "RegionalContactsApp.Domain\RegionalContactsApp.Domain.csproj", "{D0F99A86-41CD-4F7D-833E-E555CAE2961C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RegionalContactsApp.Domain", "RegionalContactsApp.Domain\RegionalContactsApp.Domain.csproj", "{D0F99A86-41CD-4F7D-833E-E555CAE2961C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RegionalContactsApp.Infrastructure", "RegionalContactsApp.Infrastructure\RegionalContactsApp.Infrastructure.csproj", "{4A741C1C-BEC7-416B-AB63-8F30FE74A6A9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RegionalContactsApp.Infrastructure", "RegionalContactsApp.Infrastructure\RegionalContactsApp.Infrastructure.csproj", "{4A741C1C-BEC7-416B-AB63-8F30FE74A6A9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RegionalContactsApp.Application", "RegionalContactsApp.Application\RegionalContactsApp.Application.csproj", "{19E20DE6-E293-4433-B3CD-75EDC448C71A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RegionalContactsApp.Application", "RegionalContactsApp.Application\RegionalContactsApp.Application.csproj", "{19E20DE6-E293-4433-B3CD-75EDC448C71A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RegionalContactsApp.API", "RegionalContactsApp.API\RegionalContactsApp.API.csproj", "{EBD5D5FD-4F5C-47F3-9B87-7125072D4DBC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RegionalContactsApp.Tests", "RegionalContactsApp.Tests\RegionalContactsApp.Tests.csproj", "{AA873513-A83C-4F81-9608-5307EE90F1CA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RegionalContactsApp.Tests", "RegionalContactsApp.Tests\RegionalContactsApp.Tests.csproj", "{AA873513-A83C-4F81-9608-5307EE90F1CA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RegionalContactsApp.IntegrationTests", "RegionalContactsApp.IntegrationTests\RegionalContactsApp.IntegrationTests.csproj", "{93B4111D-FD99-492D-A060-6F242FA638BC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RegionalContactsApp.IntegrationTests", "RegionalContactsApp.IntegrationTests\RegionalContactsApp.IntegrationTests.csproj", "{93B4111D-FD99-492D-A060-6F242FA638BC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthService.API", "AuthService.API\AuthService.API.csproj", "{88D1C2CE-9603-49CC-85E0-AEF83C3C760F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContactsService.API", "ContactsService.API\ContactsService.API.csproj", "{13A335C6-8AEC-44CB-A869-960129CD68C8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RegionsService.API", "RegionsService.API\RegionsService.API.csproj", "{167B5F25-14E8-46EC-BDF5-BB94063E913F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "APIs", "APIs", "{049E2033-60B2-4376-9AAF-CD2A8D7249E4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{D0F99A86-41CD-4F7D-833E-E555CAE2961C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -36,10 +39,6 @@ Global
 		{19E20DE6-E293-4433-B3CD-75EDC448C71A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{19E20DE6-E293-4433-B3CD-75EDC448C71A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{19E20DE6-E293-4433-B3CD-75EDC448C71A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EBD5D5FD-4F5C-47F3-9B87-7125072D4DBC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EBD5D5FD-4F5C-47F3-9B87-7125072D4DBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EBD5D5FD-4F5C-47F3-9B87-7125072D4DBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EBD5D5FD-4F5C-47F3-9B87-7125072D4DBC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AA873513-A83C-4F81-9608-5307EE90F1CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AA873513-A83C-4F81-9608-5307EE90F1CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AA873513-A83C-4F81-9608-5307EE90F1CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -48,5 +47,28 @@ Global
 		{93B4111D-FD99-492D-A060-6F242FA638BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{93B4111D-FD99-492D-A060-6F242FA638BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{93B4111D-FD99-492D-A060-6F242FA638BC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{88D1C2CE-9603-49CC-85E0-AEF83C3C760F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88D1C2CE-9603-49CC-85E0-AEF83C3C760F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88D1C2CE-9603-49CC-85E0-AEF83C3C760F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88D1C2CE-9603-49CC-85E0-AEF83C3C760F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{13A335C6-8AEC-44CB-A869-960129CD68C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{13A335C6-8AEC-44CB-A869-960129CD68C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{13A335C6-8AEC-44CB-A869-960129CD68C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{13A335C6-8AEC-44CB-A869-960129CD68C8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{167B5F25-14E8-46EC-BDF5-BB94063E913F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{167B5F25-14E8-46EC-BDF5-BB94063E913F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{167B5F25-14E8-46EC-BDF5-BB94063E913F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{167B5F25-14E8-46EC-BDF5-BB94063E913F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{88D1C2CE-9603-49CC-85E0-AEF83C3C760F} = {049E2033-60B2-4376-9AAF-CD2A8D7249E4}
+		{13A335C6-8AEC-44CB-A869-960129CD68C8} = {049E2033-60B2-4376-9AAF-CD2A8D7249E4}
+		{167B5F25-14E8-46EC-BDF5-BB94063E913F} = {049E2033-60B2-4376-9AAF-CD2A8D7249E4}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4BAEAEB5-0B16-40A4-B0EA-D907B53A97FB}
 	EndGlobalSection
 EndGlobal

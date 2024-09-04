@@ -7,7 +7,6 @@ using RegionalContactsApp.Application.Services;
 using RegionalContactsApp.Domain.Interfaces;
 using RegionalContactsApp.Infrastructure.Repositories;
 using System.Data;
-using System.Security.Cryptography;
 using System.Text;
 
 public class Program
@@ -16,24 +15,22 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        // Adicione a configura√ß√£o da string de conex√£o
+        // Adicione a configuraÁ„o da string de conex„o
         string connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ??
             throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
-        // Adicione servi√ßos √† cole√ß√£o de inje√ß√£o de depend√™ncia
+        // Adicione serviÁos ‡ coleÁ„o de injeÁ„o de dependÍncia
         builder.Services.AddScoped<IContactRepository, ContactRepository>();
         builder.Services.AddScoped<IRegionRepository, RegionRepository>();
-        builder.Services.AddScoped<IUserRepository, UserRepository>();
         builder.Services.AddScoped<IDatabaseInitializer, DatabaseInitializer>();
 
         builder.Services.AddScoped<IContactService, ContactService>();
         builder.Services.AddScoped<IRegionService, RegionService>();
-        builder.Services.AddScoped<IUserService, UserService>();
 
-        // Adicione a conex√£o do banco de dados como um servi√ßo
+        // Adicione a conex„o do banco de dados como um serviÁo
         builder.Services.AddScoped<IDbConnection>(sp => new NpgsqlConnection(connectionString));
 
-        // Adicione a configura√ß√£o da string de conex√£o
+        // Adicione a configuraÁ„o da string de conex„o
         builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
 
         // Adicione suporte para controllers
@@ -42,7 +39,7 @@ public class Program
         builder.WebHost.UseKestrel()
             .UseUrls("http://*:8081");
 
-        // Configure CORS, se necess√°rio
+        // Configure CORS, se necess·rio
         builder.Services.AddCors(options =>
         {
             options.AddPolicy("AllowAll", builder =>
@@ -53,7 +50,7 @@ public class Program
             });
         });
 
-        // Adicione a autentica√ß√£o JWT
+        // Adicione a autenticaÁ„o JWT
         var key = Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Key"]);
         builder.Services.AddAuthentication(options =>
         {
@@ -79,7 +76,7 @@ public class Program
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen(c =>
         {
-            c.SwaggerDoc("v1", new OpenApiInfo { Title = "Regional Contacts API", Version = "v1" });
+            c.SwaggerDoc("v1", new OpenApiInfo { Title = "Contacts Service API", Version = "v1" });
             var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
             var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
             if (File.Exists(xmlPath))
@@ -110,7 +107,7 @@ public class Program
             });
         });
 
-        // Adicione a autoriza√ß√£o e defina uma pol√≠tica para administradores
+        // Adicione a autorizaÁ„o e defina uma polÌtica para administradores
         builder.Services.AddAuthorization(options =>
         {
             options.AddPolicy("AdminPolicy", policy => policy.RequireRole("Admin"));
@@ -118,8 +115,8 @@ public class Program
 
         var app = builder.Build();
 
-        app.UseMetricServer(); // Expor m√©tricas em /metrics
-        app.UseHttpMetrics();  // Coletar m√©tricas HTTP
+        app.UseMetricServer(); // Expor mÈtricas em /metrics
+        app.UseHttpMetrics();  // Coletar mÈtricas HTTP
 
         // Inicialize o banco de dados
         using (var scope = app.Services.CreateScope())
@@ -128,14 +125,14 @@ public class Program
             dbInitializer.Initialize();
         }
 
-        // Configure o pipeline de requisi√ß√£o HTTP
+        // Configure o pipeline de requisiÁ„o HTTP
         app.UseSwagger();
         app.UseSwaggerUI(c =>
         {
-            c.SwaggerEndpoint("/swagger/v1/swagger.json", "Regional Contacts API v1");
+            c.SwaggerEndpoint("/swagger/v1/swagger.json", "Contacts Service API v1");
         });
 
-        // Configure CORS antes da autentica√ß√£o e autoriza√ß√£o
+        // Configure CORS antes da autenticaÁ„o e autorizaÁ„o
         app.UseCors("AllowAll");
 
         app.UseRouting();

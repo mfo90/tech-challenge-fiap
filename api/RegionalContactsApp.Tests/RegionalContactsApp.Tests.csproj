@@ -18,11 +18,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Using Include="Xunit" />
+    <ProjectReference Include="..\RegionalContactsApp.Application\RegionalContactsApp.Application.csproj" />
+    <ProjectReference Include="..\RegionalContactsApp.Domain\RegionalContactsApp.Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\RegionalContactsApp.API\RegionalContactsApp.API.csproj" />
+    <Using Include="Xunit" />
   </ItemGroup>
 
 </Project>

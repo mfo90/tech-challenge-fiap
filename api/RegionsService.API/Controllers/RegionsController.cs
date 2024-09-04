@@ -6,7 +6,7 @@ using RegionalContactsApp.Domain.Interfaces;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace RegionalContactsApp.API.Controllers
+namespace RegionsService.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]

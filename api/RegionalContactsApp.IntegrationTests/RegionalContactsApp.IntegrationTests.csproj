@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\RegionalContactsApp.API\RegionalContactsApp.API.csproj" />
+    <ProjectReference Include="..\AuthService.API\AuthService.API.csproj" />
   </ItemGroup>
 
   <ItemGroup>

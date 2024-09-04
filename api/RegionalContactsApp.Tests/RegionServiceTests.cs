@@ -2,12 +2,7 @@
 using RegionalContactsApp.Application.Services;
 using RegionalContactsApp.Domain.Entities;
 using RegionalContactsApp.Domain.Interfaces;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
-using Xunit;
 
 namespace RegionalContactsApp.Tests
 {

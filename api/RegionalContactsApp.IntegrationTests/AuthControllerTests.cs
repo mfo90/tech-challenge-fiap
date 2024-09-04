@@ -8,11 +8,11 @@ using Xunit;
 
 namespace RegionalContactsApp.IntegrationTests
 {
-    public class AuthControllerTests : IClassFixture<WebApplicationFactory<Program>>
+    public class AuthControllerTests : IClassFixture<WebApplicationFactory<AuthService.API.Program>>
     {
         private readonly HttpClient _client;
 
-        public AuthControllerTests(WebApplicationFactory<Program> factory)
+        public AuthControllerTests(WebApplicationFactory<AuthService.API.Program> factory)
         {
             _client = factory.CreateClient();
         }
