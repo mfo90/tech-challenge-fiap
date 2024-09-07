@@ -7,6 +7,7 @@ obj/
 *.exe
 *.pdb
 *.dll.config
+*.bin
 
 # Ignorar arquivos de configuração de usuário
 *.user
@@ -24,3 +25,4 @@ api/.vs/RegionalRegionalContactsApp/config/applicationhost.config
 api/.vs/RegionalRegionalContactsApp/DesignTimeBuild/.dtbcache.v2
 api/.vs/RegionalRegionalContactsApp/v17/.futdcache.v2
 api/.vs/RegionalRegionalContactsApp/v17/DocumentLayout.json
+api/.vs/ProjectEvaluation/regionalregionalcontactsapp.metadata.v8.bin
