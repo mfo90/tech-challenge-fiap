@@ -19,3 +19,10 @@ docker-compose -f docker-compose.services.yml up --build -d
 
 Write-Host "Subindo serviços do arquivo docker-compose.AuthService.yml..."
 docker-compose -f docker-compose.AuthService.yml up --build -d
+
+
+Write-Host "Subindo serviços do arquivo docker-compose.ContactsService.yml..."
+docker-compose -f docker-compose.ContactsService.yml up --build -d
+
+Write-Host "Subindo serviços do arquivo docker-compose.RegionsService.yml..."
+docker-compose -f docker-compose.RegionsService.yml up --build -d

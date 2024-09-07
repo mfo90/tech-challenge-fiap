@@ -15,11 +15,11 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        // Adicione a configuração da string de conexão
+        // Adicione a configuraï¿½ï¿½o da string de conexï¿½o
         string connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ??
             throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
-        // Adicione serviços à coleção de injeção de dependência
+        // Adicione serviï¿½os ï¿½ coleï¿½ï¿½o de injeï¿½ï¿½o de dependï¿½ncia
         builder.Services.AddScoped<IContactRepository, ContactRepository>();
         builder.Services.AddScoped<IRegionRepository, RegionRepository>();
         builder.Services.AddScoped<IDatabaseInitializer, DatabaseInitializer>();
@@ -27,19 +27,19 @@ public class Program
         builder.Services.AddScoped<IContactService, ContactService>();
         builder.Services.AddScoped<IRegionService, RegionService>();
 
-        // Adicione a conexão do banco de dados como um serviço
+        // Adicione a conexï¿½o do banco de dados como um serviï¿½o
         builder.Services.AddScoped<IDbConnection>(sp => new NpgsqlConnection(connectionString));
 
-        // Adicione a configuração da string de conexão
+        // Adicione a configuraï¿½ï¿½o da string de conexï¿½o
         builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
 
         // Adicione suporte para controllers
         builder.Services.AddControllers();
 
         builder.WebHost.UseKestrel()
-            .UseUrls("http://*:8081");
+            .UseUrls("http://*:8083");
 
-        // Configure CORS, se necessário
+        // Configure CORS, se necessï¿½rio
         builder.Services.AddCors(options =>
         {
             options.AddPolicy("AllowAll", builder =>
@@ -50,7 +50,7 @@ public class Program
             });
         });
 
-        // Adicione a autenticação JWT
+        // Adicione a autenticaï¿½ï¿½o JWT
         var key = Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Key"]);
         builder.Services.AddAuthentication(options =>
         {
@@ -107,7 +107,7 @@ public class Program
             });
         });
 
-        // Adicione a autorização e defina uma política para administradores
+        // Adicione a autorizaï¿½ï¿½o e defina uma polï¿½tica para administradores
         builder.Services.AddAuthorization(options =>
         {
             options.AddPolicy("AdminPolicy", policy => policy.RequireRole("Admin"));
@@ -115,8 +115,8 @@ public class Program
 
         var app = builder.Build();
 
-        app.UseMetricServer(); // Expor métricas em /metrics
-        app.UseHttpMetrics();  // Coletar métricas HTTP
+        app.UseMetricServer(); // Expor mï¿½tricas em /metrics
+        app.UseHttpMetrics();  // Coletar mï¿½tricas HTTP
 
         // Inicialize o banco de dados
         using (var scope = app.Services.CreateScope())
@@ -125,14 +125,14 @@ public class Program
             dbInitializer.Initialize();
         }
 
-        // Configure o pipeline de requisição HTTP
+        // Configure o pipeline de requisiï¿½ï¿½o HTTP
         app.UseSwagger();
         app.UseSwaggerUI(c =>
         {
             c.SwaggerEndpoint("/swagger/v1/swagger.json", "Regions Service API v1");
         });
 
-        // Configure CORS antes da autenticação e autorização
+        // Configure CORS antes da autenticaï¿½ï¿½o e autorizaï¿½ï¿½o
         app.UseCors("AllowAll");
 
         app.UseRouting();

@@ -23,10 +23,6 @@ RUN dotnet publish -c Release -o /app/publish
 # Use the official .NET 8.0 Runtime image to run the application
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 
-# Add wait-for-it script
-# COPY wait-for-it.sh /usr/bin/wait-for-it
-# RUN chmod +x /usr/bin/wait-for-it
-
 # Set the working directory in the image
 WORKDIR /app
 
@@ -34,4 +30,4 @@ WORKDIR /app
 COPY --from=publish /app/publish .
 
 # Set the entry point for the application to wait for the database before starting
-ENTRYPOINT ["dotnet", "RegionalContactsApp.API.dll"]
+ENTRYPOINT ["dotnet", "ContactsService.API.dll"]
