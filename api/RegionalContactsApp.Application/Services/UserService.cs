@@ -6,6 +6,7 @@ using System;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace RegionalContactsApp.Application.Services
 {
@@ -41,7 +42,7 @@ namespace RegionalContactsApp.Application.Services
                 Role = role
             };
 
-            SendMessageToQueue(username);
+            SendMessageToQueue(user);
 
             //await _userRepository.AddUserAsync(user);
         }
@@ -67,7 +68,8 @@ namespace RegionalContactsApp.Application.Services
             }
         }
 
-        private void SendMessageToQueue(string username)
+
+        public void SendMessageToQueue<T>(T messageObject)
         {
             var factory = new ConnectionFactory()
             {
@@ -85,8 +87,9 @@ namespace RegionalContactsApp.Application.Services
                                      autoDelete: false,
                                      arguments: null);
 
-                string message = $"User Registered: {username}";
-                var body = Encoding.UTF8.GetBytes(message);
+                // Serialize the object to JSON
+                string jsonMessage = JsonConvert.SerializeObject(messageObject);
+                var body = Encoding.UTF8.GetBytes(jsonMessage);
 
                 channel.BasicPublish(exchange: "",
                                      routingKey: "UserRegisteredQueue",
@@ -95,4 +98,5 @@ namespace RegionalContactsApp.Application.Services
             }
         }
     }
+
 }

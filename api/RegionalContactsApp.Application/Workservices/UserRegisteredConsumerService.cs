@@ -6,18 +6,24 @@ using System;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using RegionalContactsApp.Domain.Entities;
+using RegionalContactsApp.Domain.Interfaces;
+using Newtonsoft.Json;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace RegionalContactsApp.Application.Services
+namespace RegionalContactsApp.Application.Workservices
 {
     public class UserRegisteredConsumerService : BackgroundService
     {
         private readonly IConfiguration _configuration;
         private IConnection _connection;
         private IModel _channel;
+        private readonly IServiceScopeFactory _serviceScopeFactory;
 
-        public UserRegisteredConsumerService(IConfiguration configuration)
+        public UserRegisteredConsumerService(IConfiguration configuration, IServiceScopeFactory serviceScopeFactory)
         {
             _configuration = configuration;
+            _serviceScopeFactory = serviceScopeFactory;
             InitializeRabbitMQ();
         }
 
@@ -45,12 +51,17 @@ namespace RegionalContactsApp.Application.Services
             stoppingToken.ThrowIfCancellationRequested();
 
             var consumer = new EventingBasicConsumer(_channel);
-            consumer.Received += (model, ea) =>
+            consumer.Received += async (model, ea) =>
             {
                 var body = ea.Body.ToArray();
                 var message = Encoding.UTF8.GetString(body);
                 Console.WriteLine($"Received message: {message}");
-                // Aqui você pode chamar a lógica de aplicação ou domínio para processar a mensagem
+                User user = JsonConvert.DeserializeObject<User>(message);
+                using (var scope = _serviceScopeFactory.CreateScope())
+                {
+                    var userRepository = scope.ServiceProvider.GetRequiredService<IUserRepository>();
+                    await userRepository.AddUserAsync(user);
+                }
             };
 
             _channel.BasicConsume(queue: "UserRegisteredQueue",

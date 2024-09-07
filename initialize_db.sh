@@ -9,3 +9,6 @@ sleep 30
 
 # Kill the dotnet process
 pkill dotnet
+
+
+

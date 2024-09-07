@@ -1,0 +1,19 @@
+version: '3.8'
+services:
+  api-auth:
+    build: 
+      context: ./api
+      dockerfile: Dockerfile.AuthApi
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ConnectionStrings__DefaultConnection=Server=db;Port=5432;Database=contactsdb;User Id=matheus;Password=123456;
+    ports:
+      - "8081:8081"
+    networks:
+      - monitoring_network
+    labels:
+      - "prometheus-job=api-auth"
+
+networks:
+  monitoring_network:
+    external: true
