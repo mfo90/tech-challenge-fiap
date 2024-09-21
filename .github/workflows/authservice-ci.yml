@@ -135,7 +135,7 @@ jobs:
     - name: Construir imagens Docker da API de autenticação
       run: |
         cd C:\projects\fiap
-        docker build --no-cache --pull -t auth-api:latest -f ./api/AuthService.API/Dockerfile.AuthApi ./api/AuthService.API
+        docker build --no-cache --pull -t auth-api:latest -f ./api/Dockerfile.AuthApi ./api/AuthService.API
       shell: cmd
 
     - name: Limpar cache do Docker
