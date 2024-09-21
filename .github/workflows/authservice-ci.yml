@@ -146,7 +146,7 @@ jobs:
 
     - name: Listar conteúdo do diretório onde está o Dockerfile antes de buildar
       run: |
-        cd C:\projects\fiap\api
+        cd C:\projects\fiap
         dir /s
       shell: cmd
 
