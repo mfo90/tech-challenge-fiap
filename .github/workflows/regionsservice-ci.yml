@@ -1,0 +1,56 @@
+name: CI/CD Pipeline RegionsService.API
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'api/RegionsService.API/**'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'api/RegionsService.API/**'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      db:
+        image: postgres:latest
+        env:
+          POSTGRES_USER: matheus
+          POSTGRES_PASSWORD: 123456
+          POSTGRES_DB: contactsdb
+        ports:
+          - 5432:5432
+
+    steps:
+      - name: Fazer checkout do código
+        uses: actions/checkout@v2
+
+      - name: Configurar .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restaurar dependências para RegionsService.API
+        run: dotnet restore ./api/RegionsService.API/RegionsService.API.csproj
+
+      - name: Compilar RegionsService.API
+        run: dotnet build ./api/RegionsService.API/RegionsService.API.csproj --no-restore --configuration Release
+
+      - name: Executar testes unitários RegionsService.API
+        run: dotnet test ./api/RegionsService.API/RegionsService.API.Tests/RegionsService.API.Tests.csproj --no-build --configuration Release
+
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Fazer checkout do código
+        uses: actions/checkout@v2
+
+      - name: Construir imagem Docker para RegionsService.API
+        run: docker-compose -f docker-compose.RegionsService.yml up --build -d

@@ -1,0 +1,56 @@
+name: CI/CD Pipeline ContactsService.API
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'api/ContactsService.API/**'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'api/ContactsService.API/**'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      db:
+        image: postgres:latest
+        env:
+          POSTGRES_USER: matheus
+          POSTGRES_PASSWORD: 123456
+          POSTGRES_DB: contactsdb
+        ports:
+          - 5432:5432
+
+    steps:
+      - name: Fazer checkout do código
+        uses: actions/checkout@v2
+
+      - name: Configurar .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restaurar dependências para ContactsService.API
+        run: dotnet restore ./api/ContactsService.API/ContactsService.API.csproj
+
+      - name: Compilar ContactsService.API
+        run: dotnet build ./api/ContactsService.API/ContactsService.API.csproj --no-restore --configuration Release
+
+      - name: Executar testes unitários ContactsService.API
+        run: dotnet test ./api/ContactsService.API/ContactsService.API.Tests/ContactsService.API.Tests.csproj --no-build --configuration Release
+
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Fazer checkout do código
+        uses: actions/checkout@v2
+
+      - name: Construir imagem Docker para ContactsService.API
+        run: docker-compose -f docker-compose.ContactsService.yml up --build -d

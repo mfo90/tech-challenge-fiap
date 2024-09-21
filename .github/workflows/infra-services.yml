@@ -1,0 +1,31 @@
+name: CI/CD Pipeline Infraestrutura de Serviços
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'docker-compose.services.yml'    # Acionado quando este arquivo mudar
+      - 'start.ps1'                      # Acionado quando este arquivo mudar
+      - '.github/workflows/infra-services.yml'  # Acionado quando o próprio workflow mudar
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'docker-compose.services.yml'
+      - 'start.ps1'
+      - '.github/workflows/infra-services.yml'
+
+jobs:
+  infra:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Fazer checkout do código
+        uses: actions/checkout@v2
+
+      - name: Criar rede do Docker, se não existir
+        run: docker network create monitoring_network || true
+
+      - name: Subir Infraestrutura (Postgres, RabbitMQ, PgAdmin)
+        run: docker-compose -f docker-compose.services.yml up --build -d

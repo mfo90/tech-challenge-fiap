@@ -1,0 +1,56 @@
+name: CI/CD Pipeline AuthService.API
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'api/AuthService.API/**'  # Monitorar mudanças apenas nessa API
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'api/AuthService.API/**'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      db:
+        image: postgres:latest
+        env:
+          POSTGRES_USER: matheus
+          POSTGRES_PASSWORD: 123456
+          POSTGRES_DB: contactsdb
+        ports:
+          - 5432:5432
+
+    steps:
+      - name: Fazer checkout do código
+        uses: actions/checkout@v2
+
+      - name: Configurar .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restaurar dependências para AuthService.API
+        run: dotnet restore ./api/AuthService.API/AuthService.API.csproj
+
+      - name: Compilar AuthService.API
+        run: dotnet build ./api/AuthService.API/AuthService.API.csproj --no-restore --configuration Release
+
+      - name: Executar testes unitários AuthService.API
+        run: dotnet test ./api/AuthService.API/AuthService.API.Tests/AuthService.API.Tests.csproj --no-build --configuration Release
+
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Fazer checkout do código
+        uses: actions/checkout@v2
+
+      - name: Construir imagem Docker para AuthService.API
+        run: docker-compose -f docker-compose.AuthService.yml up --build -d
