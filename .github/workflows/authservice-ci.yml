@@ -3,12 +3,12 @@ name: CI/CD Pipeline AuthService.API
 on:
   push:
     branches:
-      - main
+      - feature/criar-deploy-microservices
     paths:
       - 'api/AuthService.API/**'  # Monitorar mudanças apenas nessa API
   pull_request:
     branches:
-      - main
+      - feature/criar-deploy-microservices
     paths:
       - 'api/AuthService.API/**'
 

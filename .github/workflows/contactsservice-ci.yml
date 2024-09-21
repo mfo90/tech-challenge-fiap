@@ -3,12 +3,12 @@ name: CI/CD Pipeline ContactsService.API
 on:
   push:
     branches:
-      - main
+      - feature/criar-deploy-microservices
     paths:
       - 'api/ContactsService.API/**'
   pull_request:
     branches:
-      - main
+      - feature/criar-deploy-microservices
     paths:
       - 'api/ContactsService.API/**'
 

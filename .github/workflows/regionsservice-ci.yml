@@ -3,12 +3,12 @@ name: CI/CD Pipeline RegionsService.API
 on:
   push:
     branches:
-      - main
+      - feature/criar-deploy-microservices
     paths:
       - 'api/RegionsService.API/**'
   pull_request:
     branches:
-      - main
+      - feature/criar-deploy-microservices
     paths:
       - 'api/RegionsService.API/**'
 

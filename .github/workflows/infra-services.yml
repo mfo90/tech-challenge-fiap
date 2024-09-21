@@ -3,14 +3,14 @@ name: CI/CD Pipeline Infraestrutura de Serviços
 on:
   push:
     branches:
-      - main
+      - feature/criar-deploy-microservices
     paths:
       - 'docker-compose.services.yml'    # Acionado quando este arquivo mudar
       - 'start.ps1'                      # Acionado quando este arquivo mudar
       - '.github/workflows/infra-services.yml'  # Acionado quando o próprio workflow mudar
   pull_request:
     branches:
-      - main
+      - feature/criar-deploy-microservices
     paths:
       - 'docker-compose.services.yml'
       - 'start.ps1'
