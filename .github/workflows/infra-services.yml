@@ -19,15 +19,30 @@ on:
 jobs:
   infra:
     # Mudança aqui para usar o runner self-hosted na sua máquina local
-    runs-on: self-hosted  
+    runs-on: [self-hosted, my-windows-runner]  # 'my-windows-runner' é a label opcional
 
     steps:
+      # Checkout do repositório para obter o código mais recente
       - name: Fazer checkout do código
         uses: actions/checkout@v2
 
-      # Se o Docker Compose já estiver instalado na sua máquina, pode remover este passo
+      # Verificar a versão do Docker para garantir que está instalado corretamente
+      - name: Verificar versão do Docker
+        run: docker --version
+
+      # Verificar status do Docker para garantir que está rodando e configurado corretamente
+      - name: Verificar status do Docker
+        run: docker info
+
+      # Criar rede do Docker, se não existir
       - name: Criar rede do Docker, se não existir
         run: docker network create monitoring_network || true
 
+      # Subir a infraestrutura definida no docker-compose.services.yml (Postgres, RabbitMQ, PgAdmin)
       - name: Subir Infraestrutura (Postgres, RabbitMQ, PgAdmin)
         run: docker-compose -f docker-compose.services.yml up --build -d
+
+      # Passo opcional para limpeza de containers Docker após a execução, mesmo que o job falhe
+      - name: Limpar containers Docker após o job
+        if: always()  # Isso garante que o passo seja executado mesmo que outros falhem
+        run: docker-compose -f docker-compose.services.yml down
