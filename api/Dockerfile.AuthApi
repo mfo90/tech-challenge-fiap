@@ -5,14 +5,14 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
 # Copy the .csproj files and restore dependencies
-COPY AuthService.API/*.csproj AuthService.API/
-COPY RegionalContactsApp.Application/*.csproj RegionalContactsApp.Application/
-COPY RegionalContactsApp.Domain/*.csproj RegionalContactsApp.Domain/
-COPY RegionalContactsApp.Infrastructure/*.csproj RegionalContactsApp.Infrastructure/
-RUN dotnet restore AuthService.API/AuthService.API.csproj
+COPY ./api/AuthService.API/*.csproj ./AuthService.API/
+COPY ./api/RegionalContactsApp.Application/*.csproj ./RegionalContactsApp.Application/
+COPY ./api/RegionalContactsApp.Domain/*.csproj ./RegionalContactsApp.Domain/
+COPY ./api/RegionalContactsApp.Infrastructure/*.csproj ./RegionalContactsApp.Infrastructure/
+RUN dotnet restore ./AuthService.API/AuthService.API.csproj
 
 # Copy all the solution files and build the application
-COPY . .
+COPY ./api .  # Copia todo o conteúdo da pasta "api"
 WORKDIR /src/AuthService.API
 RUN dotnet build -c Release -o /app/build
 
@@ -31,4 +31,3 @@ COPY --from=publish /app/publish .
 
 # Set the entry point for the application
 ENTRYPOINT ["dotnet", "AuthService.API.dll"]
-
