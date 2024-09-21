@@ -56,28 +56,34 @@ jobs:
         chmod +x initialize_db.sh
         ./initialize_db.sh
 
+    # Restaurar as dependências da AuthService.API
     - name: Restaurar dependências
-      run: dotnet restore api/RegionalRegionalContactsApp.sln
+      run: dotnet restore api/AuthService.API/AuthService.API.csproj
 
+    # Compilar a AuthService.API
     - name: Compilar solução
-      run: dotnet build api/RegionalRegionalContactsApp.sln --no-restore --configuration Release
+      run: dotnet build api/AuthService.API/AuthService.API.csproj --no-restore --configuration Release
 
-    - name: Executar testes unitários com cobertura
+    # Executar testes unitários no projeto RegionalContactsApp.Tests
+    - name: Executar testes unitários com cobertura (RegionalContactsApp.Tests)
       run: |
         dotnet test api/RegionalContactsApp.Tests/RegionalContactsApp.Tests.csproj --no-build --configuration Release --collect:"XPlat Code Coverage" --results-directory ./TestResults/UnitTests
 
-    - name: Executar testes de integração com cobertura
+    # Executar testes de integração no projeto RegionalContactsApp.IntegrationTests
+    - name: Executar testes de integração com cobertura (RegionalContactsApp.IntegrationTests)
       env:
         ConnectionStrings__DefaultConnection: Server=localhost;Port=5432;Database=contactsdb;User Id=matheus;Password=123456;
       run: |
         dotnet test api/RegionalContactsApp.IntegrationTests/RegionalContactsApp.IntegrationTests.csproj --no-build --configuration Release --collect:"XPlat Code Coverage" --results-directory ./TestResults/IntegrationTests
 
+    # Relatar cobertura dos testes unitários
     - name: Relatar cobertura dos testes unitários
       uses: actions/upload-artifact@v3
       with:
         name: cobertura-teste-unitario
         path: ./TestResults/UnitTests
 
+    # Relatar cobertura dos testes de integração
     - name: Relatar cobertura dos testes de integração
       uses: actions/upload-artifact@v3
       with:
@@ -105,10 +111,10 @@ jobs:
     - name: Configurar Docker Buildx
       uses: docker/setup-buildx-action@v1
 
-    - name: Construir imagens Docker
+    - name: Construir imagens Docker da API de autenticação
       run: |
         cd C:\projects\fiap
-        docker build --no-cache --pull -t api:latest -f ./api/Dockerfile.AuthApi ./api
+        docker build --no-cache --pull -t auth-api:latest -f ./api/AuthService.API/Dockerfile.AuthApi ./api/AuthService.API
       shell: cmd
 
     - name: Limpar cache do Docker
