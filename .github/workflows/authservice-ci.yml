@@ -56,13 +56,13 @@ jobs:
         chmod +x initialize_db.sh
         ./initialize_db.sh
 
-    # Restaurar as dependências da solução inteira
+    # Restaurar as dependências do AuthService.API
     - name: Restaurar dependências
-      run: dotnet restore api/RegionalRegionalContactsApp.sln  # Usar a solução que engloba todos os projetos
+      run: dotnet restore api/AuthService.API/AuthService.API.csproj  # Restaura apenas o AuthService.API
 
-    # Compilar a solução inteira
-    - name: Compilar solução
-      run: dotnet build api/RegionalRegionalContactsApp.sln --no-restore --configuration Release
+    # Compilar o projeto AuthService.API
+    - name: Compilar AuthService.API
+      run: dotnet build api/AuthService.API/AuthService.API.csproj --no-restore --configuration Release  # Compila apenas o AuthService.API
 
     # Executar testes unitários no projeto RegionalContactsApp.Tests
     - name: Executar testes unitários com cobertura (RegionalContactsApp.Tests)
