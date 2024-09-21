@@ -19,7 +19,7 @@ on:
 jobs:
   infra:
     # Mudança aqui para usar o runner self-hosted na sua máquina local
-    runs-on: [self-hosted, my-windows-runner]  # 'my-windows-runner' é a label opcional
+    runs-on: self-hosted
 
     steps:
       # Checkout do repositório para obter o código mais recente
