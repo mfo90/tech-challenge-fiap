@@ -121,38 +121,11 @@ jobs:
     - name: Fazer checkout do código
       uses: actions/checkout@v3
 
-    - name: Listar estrutura de pastas para depuração antes do build
-      run: |
-        dir /s
-      shell: cmd
-
-    - name: Criar diretório para o repositório, se não existir
-      run: |
-        if not exist C:\projects\fiap mkdir C:\projects\fiap
-      shell: cmd
-
-    - name: Transferir repositório para o diretório local
-      run: |
-        xcopy . C:\projects\fiap /E /I /Y
-      shell: cmd
-
-    - name: Listar conteúdo do diretório após o xcopy
-      run: |
-        dir C:\projects\fiap /s
-      shell: cmd
-
     - name: Configurar Docker Buildx
       uses: docker/setup-buildx-action@v1
 
-    - name: Listar conteúdo do diretório onde está o Dockerfile antes de buildar
-      run: |
-        cd C:\projects\fiap
-        dir /s
-      shell: cmd
-
     - name: Construir imagens Docker da API de autenticação
       run: |
-        cd C:\projects\fiap
         docker build --no-cache --pull -t auth-api:latest -f ./api/Dockerfile.AuthApi .
       shell: cmd
 
@@ -172,7 +145,9 @@ jobs:
     - name: Fazer deploy localmente
       run: |
         cd C:\projects\fiap
-        docker-compose -f docker-compose.AuthService.yml down
+        if docker-compose -f docker-compose.AuthService.yml ps; then
+          docker-compose -f docker-compose.AuthService.yml down
+        fi
         docker-compose -f docker-compose.AuthService.yml build --no-cache
         docker-compose -f docker-compose.AuthService.yml up -d
       shell: cmd
