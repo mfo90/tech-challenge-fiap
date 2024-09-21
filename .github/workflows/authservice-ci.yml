@@ -133,10 +133,10 @@ jobs:
       uses: docker/setup-buildx-action@v1
 
     - name: Construir imagens Docker da API de autenticação
-    run: |
-      cd C:\projects\fiap
-      docker build --no-cache --pull -t auth-api:latest -f ./api/Dockerfile.AuthApi .
-    shell: cmd
+      run: |
+        cd C:\projects\fiap
+        docker build --no-cache --pull -t auth-api:latest -f ./api/Dockerfile.AuthApi .
+      shell: cmd
 
     - name: Limpar cache do Docker
       run: docker builder prune -f
