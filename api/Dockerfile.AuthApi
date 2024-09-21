@@ -4,30 +4,30 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 # Set the working directory in the image
 WORKDIR /src
 
-# Copy the .csproj files and restore dependencies
-COPY ./api/AuthService.API/*.csproj ./AuthService.API/
-COPY ./api/RegionalContactsApp.Application/*.csproj ./RegionalContactsApp.Application/
-COPY ./api/RegionalContactsApp.Domain/*.csproj ./RegionalContactsApp.Domain/
-COPY ./api/RegionalContactsApp.Infrastructure/*.csproj ./RegionalContactsApp.Infrastructure/
+# Copy the .csproj files e restaurar dependências
+COPY api/AuthService.API/*.csproj ./AuthService.API/
+COPY api/RegionalContactsApp.Application/*.csproj ./RegionalContactsApp.Application/
+COPY api/RegionalContactsApp.Domain/*.csproj ./RegionalContactsApp.Domain/
+COPY api/RegionalContactsApp.Infrastructure/*.csproj ./RegionalContactsApp.Infrastructure/
 RUN dotnet restore ./AuthService.API/AuthService.API.csproj
 
-# Copy all the solution files and build the application
-COPY ./api .  # Copia todo o conteúdo da pasta "api"
+# Copie todos os arquivos da solução e construa o projeto
+COPY api/ ./api/
 WORKDIR /src/AuthService.API
 RUN dotnet build -c Release -o /app/build
 
-# Publish the application
+# Publique a aplicação
 FROM build AS publish
 RUN dotnet publish -c Release -o /app/publish
 
-# Use the official .NET 8.0 Runtime image to run the application
+# Use a imagem do runtime do .NET para rodar a aplicação
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 
 # Set the working directory in the image
 WORKDIR /app
 
-# Copy the published files to the working directory
+# Copie os arquivos publicados para o diretório de trabalho
 COPY --from=publish /app/publish .
 
-# Set the entry point for the application
+# Defina o ponto de entrada da aplicação
 ENTRYPOINT ["dotnet", "AuthService.API.dll"]
