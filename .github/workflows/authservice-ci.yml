@@ -22,11 +22,11 @@ jobs:
         env:
           POSTGRES_USER: matheus
           POSTGRES_PASSWORD: 123456
-          POSTGRES_DB: authdb
+          POSTGRES_DB: contactsdb
         ports:
           - 5432:5432
         options: >-
-          --health-cmd="pg_isready -U matheus -d authdb"
+          --health-cmd="pg_isready -U matheus -d contactsdb"
           --health-interval=10s
           --health-timeout=5s
           --health-retries=5
@@ -43,7 +43,7 @@ jobs:
     - name: Esperar pelo Postgres
       run: |
         until pg_isready -h localhost -p 5432 -U matheus; do
-          echo "Esperando pelo Postgres..."; 
+          echo "Esperando pelo Postgres...";
           sleep 5;
         done
 
@@ -52,15 +52,33 @@ jobs:
         chmod +x initialize_db.sh
         ./initialize_db.sh
 
-    - name: Restaurar dependências para AuthService.API
-      run: dotnet restore api/AuthService.API/AuthService.API.csproj
+    - name: Restaurar dependências
+      run: dotnet restore api/RegionalRegionalContactsApp.sln
 
-    - name: Compilar AuthService.API
-      run: dotnet build api/AuthService.API/AuthService.API.csproj --no-restore --configuration Release
+    - name: Compilar solução
+      run: dotnet build api/RegionalRegionalContactsApp.sln --no-restore --configuration Release
 
-    - name: Executar testes unitários para AuthService.API
+    - name: Executar testes unitários com cobertura
       run: |
-        dotnet test api/AuthService.API/AuthService.API.Tests/AuthService.API.Tests.csproj --no-build --configuration Release --collect:"XPlat Code Coverage" --results-directory ./TestResults/UnitTests
+        dotnet test api/RegionalContactsApp.Tests/RegionalContactsApp.Tests.csproj --no-build --configuration Release --collect:"XPlat Code Coverage" --results-directory ./TestResults/UnitTests
+
+    - name: Executar testes de integração com cobertura
+      env:
+        ConnectionStrings__DefaultConnection: Server=localhost;Port=5432;Database=contactsdb;User Id=matheus;Password=123456;
+      run: |
+        dotnet test api/RegionalContactsApp.IntegrationTests/RegionalContactsApp.IntegrationTests.csproj --no-build --configuration Release --collect:"XPlat Code Coverage" --results-directory ./TestResults/IntegrationTests
+
+    - name: Relatar cobertura dos testes unitários
+      uses: actions/upload-artifact@v2
+      with:
+        name: cobertura-teste-unitario
+        path: ./TestResults/UnitTests
+
+    - name: Relatar cobertura dos testes de integração
+      uses: actions/upload-artifact@v2
+      with:
+        name: cobertura-teste-integracao
+        path: ./TestResults/IntegrationTests
 
   build:
     needs: test
@@ -83,10 +101,10 @@ jobs:
     - name: Configurar Docker Buildx
       uses: docker/setup-buildx-action@v1
 
-    - name: Construir imagem Docker para AuthService.API
+    - name: Construir imagens Docker
       run: |
         cd C:\projects\fiap
-        docker build --no-cache --pull -t authservice:latest -f ./api/AuthService.API/Dockerfile.api ./api/AuthService.API
+        docker build --no-cache --pull -t api:latest -f ./api/Dockerfile.AuthApi ./api
       shell: cmd
 
     - name: Limpar cache do Docker
@@ -105,7 +123,7 @@ jobs:
     - name: Fazer deploy localmente
       run: |
         cd C:\projects\fiap
-        docker-compose down
-        docker-compose build --no-cache
-        docker-compose up -d
+        docker-compose -f docker-compose.AuthService.yml down
+        docker-compose -f docker-compose.AuthService.yml build --no-cache
+        docker-compose -f docker-compose.AuthService.yml up -d
       shell: cmd
