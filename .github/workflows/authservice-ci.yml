@@ -8,6 +8,7 @@ on:
       - 'api/AuthService.API/**'
       - 'docker-compose.AuthService.yml'
       - '.github/workflows/authservice-ci.yml'
+      - 'api/Dockerfile.AuthApi'
   pull_request:
     branches:
       - feature/criar-deploy-microservices
@@ -15,6 +16,7 @@ on:
       - 'api/AuthService.API/**'
       - 'docker-compose.AuthService.yml'
       - '.github/workflows/authservice-ci.yml'
+      - 'api/Dockerfile.AuthApi'
 
 jobs:
   test:
