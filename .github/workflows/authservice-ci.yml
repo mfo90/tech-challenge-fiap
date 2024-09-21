@@ -6,6 +6,8 @@ on:
       - feature/criar-deploy-microservices
     paths:
       - 'api/AuthService.API/**'
+      - 'docker-compose.AuthService.yml'
+      - '.github/workflows/authservice-ci.yml'
   pull_request:
     branches:
       - feature/criar-deploy-microservices
