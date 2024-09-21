@@ -33,7 +33,8 @@ jobs:
         shell: cmd
 
       - name: Criar rede do Docker, se não existir
-        run: docker network create monitoring_network || true
+        run: |
+          docker network ls | findstr monitoring_network || docker network create monitoring_network
         shell: cmd
 
       - name: Subir Infraestrutura (Postgres, RabbitMQ, PgAdmin)
