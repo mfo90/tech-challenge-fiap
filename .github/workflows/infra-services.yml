@@ -24,6 +24,11 @@ jobs:
       - name: Fazer checkout do código
         uses: actions/checkout@v2
 
+      - name: Instalar Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install docker-compose -y
+
       - name: Criar rede do Docker, se não existir
         run: docker network create monitoring_network || true
 

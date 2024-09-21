@@ -22,35 +22,90 @@ jobs:
         env:
           POSTGRES_USER: matheus
           POSTGRES_PASSWORD: 123456
-          POSTGRES_DB: contactsdb
+          POSTGRES_DB: regionsdb
         ports:
           - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U matheus -d regionsdb"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
 
     steps:
-      - name: Fazer checkout do código
-        uses: actions/checkout@v2
+    - name: Fazer checkout do código
+      uses: actions/checkout@v2
 
-      - name: Configurar .NET Core
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: '8.0.x'
+    - name: Configurar .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '8.0.x'
 
-      - name: Restaurar dependências para RegionsService.API
-        run: dotnet restore ./api/RegionsService.API/RegionsService.API.csproj
+    - name: Esperar pelo Postgres
+      run: |
+        until pg_isready -h localhost -p 5432 -U matheus; do
+          echo "Esperando pelo Postgres..."; 
+          sleep 5;
+        done
 
-      - name: Compilar RegionsService.API
-        run: dotnet build ./api/RegionsService.API/RegionsService.API.csproj --no-restore --configuration Release
+    - name: Inicializar banco de dados
+      run: |
+        chmod +x initialize_db.sh
+        ./initialize_db.sh
 
-      - name: Executar testes unitários RegionsService.API
-        run: dotnet test ./api/RegionsService.API/RegionsService.API.Tests/RegionsService.API.Tests.csproj --no-build --configuration Release
+    - name: Restaurar dependências para RegionsService.API
+      run: dotnet restore api/RegionsService.API/RegionsService.API.csproj
+
+    - name: Compilar RegionsService.API
+      run: dotnet build api/RegionsService.API/RegionsService.API.csproj --no-restore --configuration Release
+
+    - name: Executar testes unitários para RegionsService.API
+      run: |
+        dotnet test api/RegionsService.API/RegionsService.API.Tests/RegionsService.API.Tests.csproj --no-build --configuration Release --collect:"XPlat Code Coverage" --results-directory ./TestResults/UnitTests
 
   build:
     needs: test
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
-      - name: Fazer checkout do código
-        uses: actions/checkout@v2
+    - name: Fazer checkout do código
+      uses: actions/checkout@v2
 
-      - name: Construir imagem Docker para RegionsService.API
-        run: docker-compose -f docker-compose.RegionsService.yml up --build -d
+    - name: Criar diretório para o repositório, se não existir
+      run: |
+        if not exist C:\projects\fiap mkdir C:\projects\fiap
+      shell: cmd
+
+    - name: Transferir repositório para o diretório local
+      run: |
+        xcopy . C:\projects\fiap /E /I /Y
+      shell: cmd
+
+    - name: Configurar Docker Buildx
+      uses: docker/setup-buildx-action@v1
+
+    - name: Construir imagem Docker para RegionsService.API
+      run: |
+        cd C:\projects\fiap
+        docker build --no-cache --pull -t regionsservice:latest -f ./api/RegionsService.API/Dockerfile.api ./api/RegionsService.API
+      shell: cmd
+
+    - name: Limpar cache do Docker
+      run: docker builder prune -f
+      shell: cmd
+
+    - name: Limpar sistema Docker
+      run: docker system prune -af --volumes
+      shell: cmd
+
+  deploy:
+    needs: build
+    runs-on: self-hosted
+
+    steps:
+    - name: Fazer deploy localmente
+      run: |
+        cd C:\projects\fiap
+        docker-compose down
+        docker-compose build --no-cache
+        docker-compose up -d
+      shell: cmd

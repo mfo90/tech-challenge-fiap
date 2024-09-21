@@ -25,32 +25,83 @@ jobs:
           POSTGRES_DB: contactsdb
         ports:
           - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U matheus -d contactsdb"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
 
     steps:
-      - name: Fazer checkout do código
-        uses: actions/checkout@v2
+    - name: Fazer checkout do código
+      uses: actions/checkout@v2
 
-      - name: Configurar .NET Core
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: '8.0.x'
+    - name: Configurar .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '8.0.x'
 
-      - name: Restaurar dependências para ContactsService.API
-        run: dotnet restore ./api/ContactsService.API/ContactsService.API.csproj
+    - name: Esperar pelo Postgres
+      run: |
+        until pg_isready -h localhost -p 5432 -U matheus; do
+          echo "Esperando pelo Postgres..."; 
+          sleep 5;
+        done
 
-      - name: Compilar ContactsService.API
-        run: dotnet build ./api/ContactsService.API/ContactsService.API.csproj --no-restore --configuration Release
+    - name: Inicializar banco de dados
+      run: |
+        chmod +x initialize_db.sh
+        ./initialize_db.sh
 
-      - name: Executar testes unitários ContactsService.API
-        run: dotnet test ./api/ContactsService.API/ContactsService.API.Tests/ContactsService.API.Tests.csproj --no-build --configuration Release
+    - name: Restaurar dependências para ContactsService.API
+      run: dotnet restore api/ContactsService.API/ContactsService.API.csproj
+
+    - name: Compilar ContactsService.API
+      run: dotnet build api/ContactsService.API/ContactsService.API.csproj --no-restore --configuration Release
+
+    - name: Executar testes unitários para ContactsService.API
+      run: |
+        dotnet test api/ContactsService.API/ContactsService.API.Tests/ContactsService.API.Tests.csproj --no-build --configuration Release --collect:"XPlat Code Coverage" --results-directory ./TestResults/UnitTests
 
   build:
     needs: test
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
-      - name: Fazer checkout do código
-        uses: actions/checkout@v2
+    - name: Fazer checkout do código
+      uses: actions/checkout@v2
 
-      - name: Construir imagem Docker para ContactsService.API
-        run: docker-compose -f docker-compose.ContactsService.yml up --build -d
+    - name: Criar diretório para o repositório, se não existir
+      run: |
+        if not exist C:\projects\fiap mkdir C:\projects\fiap
+      shell: cmd
+
+    - name: Transferir repositório para o diretório local
+      run: |
+        xcopy . C:\projects\fiap /E /I /Y
+      shell: cmd
+
+    - name: Configurar Docker Buildx
+      uses: docker/setup-buildx-action@v1
+
+    - name: Construir imagem Docker para ContactsService.API
+      run: |
+        cd C:\projects\fiap
+        docker build --no-cache --pull -t contactsservice:latest -f ./api/ContactsService.API/Dockerfile.api ./api/ContactsService.API
+      shell: cmd
+
+    - name: Limpar cache do Docker
+      run: docker builder prune -f
+      shell: cmd
+
+    - name: Limpar sistema Docker
+      run: docker system prune -af --volumes
+      shell: cmd
+
+  deploy:
+    needs: build
+    runs-on: self-hosted
+
+    steps:
+    - name: Fazer deploy localmente
+      run: |
+   
