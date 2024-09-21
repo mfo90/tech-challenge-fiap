@@ -18,17 +18,14 @@ on:
 
 jobs:
   infra:
-    runs-on: ubuntu-latest
+    # Mudança aqui para usar o runner self-hosted na sua máquina local
+    runs-on: self-hosted  
 
     steps:
       - name: Fazer checkout do código
         uses: actions/checkout@v2
 
-      - name: Instalar Docker Compose
-        run: |
-          sudo apt-get update
-          sudo apt-get install docker-compose -y
-
+      # Se o Docker Compose já estiver instalado na sua máquina, pode remover este passo
       - name: Criar rede do Docker, se não existir
         run: docker network create monitoring_network || true
 
