@@ -11,6 +11,8 @@ on:
       - feature/criar-deploy-microservices
     paths:
       - 'api/AuthService.API/**'
+      - 'docker-compose.AuthService.yml'
+      - '.github/workflows/authservice-ci.yml'
 
 jobs:
   test:
