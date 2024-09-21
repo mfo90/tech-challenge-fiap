@@ -21,27 +21,40 @@ jobs:
     runs-on: self-hosted  
 
     steps:
+      # Checkout do código
       - name: Fazer checkout do código
         uses: actions/checkout@v2
 
+      # Verificar a versão do Docker
       - name: Verificar versão do Docker
         run: docker --version
         shell: cmd
 
+      # Verificar status do Docker
       - name: Verificar status do Docker
         run: docker info
         shell: cmd
 
+      # Criar rede do Docker, se não existir
       - name: Criar rede do Docker, se não existir
         run: |
           docker network ls | findstr monitoring_network || docker network create monitoring_network
         shell: cmd
 
+      # Subir Infraestrutura (Postgres, RabbitMQ, PgAdmin)
       - name: Subir Infraestrutura (Postgres, RabbitMQ, PgAdmin)
         run: docker-compose -f docker-compose.services.yml up --build -d
         shell: cmd
 
-      - name: Limpar containers Docker após o job
-        if: always()
-        run: docker-compose -f docker-compose.services.yml down
+      # Verificar containers ativos após subir a infraestrutura
+      - name: Verificar containers ativos
+        run: docker ps
         shell: cmd
+
+      # (OPCIONAL) Limpar containers Docker após o job - REMOVER SE QUISER MANTÊ-LOS ATIVOS
+      # Caso você não queira que os containers sejam removidos após o job, comente ou remova este passo
+      # Se você quiser manter os containers ativos após o deploy, remova esse bloco
+      #- name: Limpar containers Docker após o job
+      #  if: always()
+      #  run: docker-compose -f docker-compose.services.yml down
+      #  shell: cmd
