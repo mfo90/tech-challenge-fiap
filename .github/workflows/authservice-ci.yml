@@ -10,6 +10,13 @@ on:
       - feature/criar-deploy-microservices
     paths:
       - 'api/AuthService.API/**'
+      - 'api/RegionalContactsApp.IntegrationTests/AuthControllerTests.cs'
+      - 'api/RegionalContactsApp.Tests/AuthControllerTests.cs'
+      - 'api/RegionalContactsApp.Infrastructure/Repositories/DatabaseInitializer.cs'
+      - 'api/RegionalContactsApp.Infrastructure/Repositories/UserRepository.cs.cs'
+      - 'api/RegionalContactsApp.Domain/Entities/User.cs'
+      - 'api/RegionalContactsApp.Application/Services/UserService.cs'
+      - 'api/RegionalContactsApp.Application/Workservices/UserRegisteredConsumerService.cs'
       - 'docker-compose.AuthService.yml'
       - '.github/workflows/authservice-ci.yml'
       - 'api/Dockerfile.AuthApi'
@@ -18,6 +25,13 @@ on:
       - feature/criar-deploy-microservices
     paths:
       - 'api/AuthService.API/**'
+      - 'api/RegionalContactsApp.IntegrationTests/AuthControllerTests.cs'
+      - 'api/RegionalContactsApp.Tests/AuthControllerTests.cs'
+      - 'api/RegionalContactsApp.Infrastructure/Repositories/DatabaseInitializer.cs'
+      - 'api/RegionalContactsApp.Infrastructure/Repositories/UserRepository.cs.cs'
+      - 'api/RegionalContactsApp.Domain/Entities/User.cs'
+      - 'api/RegionalContactsApp.Application/Services/UserService.cs'
+      - 'api/RegionalContactsApp.Application/Workservices/UserRegisteredConsumerService.cs'
       - 'docker-compose.AuthService.yml'
       - '.github/workflows/authservice-ci.yml'
       - 'api/Dockerfile.AuthApi'
