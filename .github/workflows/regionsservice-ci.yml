@@ -7,7 +7,7 @@ on:
       - completed
   push:
     branches:
-      - feature/criar-deploy-microservices
+      - main
     paths:
       - 'api/RegionsService.API/**'
       - 'api/RegionalContactsApp.IntegrationTests/AuthControllerTests.cs'
@@ -26,7 +26,7 @@ on:
       - 'api/Dockerfile.RegionsApi'
   pull_request:
     branches:
-      - feature/criar-deploy-microservices
+      - main
     paths:
       - 'api/RegionsService.API/**'
       - 'api/RegionalContactsApp.IntegrationTests/AuthControllerTests.cs'
