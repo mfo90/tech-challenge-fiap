@@ -156,11 +156,7 @@ jobs:
 
     - name: Fazer deploy localmente
       run: |
-        if docker-compose -f docker-compose.AuthService.yml ps; then
-          docker-compose -f docker-compose.AuthService.yml down
-        else
-          echo "Docker Compose não está rodando."
-        fi
+        docker-compose -f docker-compose.AuthService.yml down || echo "Docker Compose não está rodando."
         docker-compose -f docker-compose.AuthService.yml build --no-cache
         docker-compose -f docker-compose.AuthService.yml up -d
       shell: cmd
