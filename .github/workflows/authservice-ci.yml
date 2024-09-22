@@ -142,11 +142,24 @@ jobs:
     runs-on: self-hosted
 
     steps:
+    - name: Fazer checkout do código
+      uses: actions/checkout@v3
+
+    - name: Verificar existência do diretório e navegar até ele
+      run: |
+        if not exist C:\projects\fiap (
+          echo "Criando o diretório C:\projects\fiap"
+          mkdir C:\projects\fiap
+        )
+        cd C:\projects\fiap
+      shell: cmd
+
     - name: Fazer deploy localmente
       run: |
-        cd C:\projects\fiap
         if docker-compose -f docker-compose.AuthService.yml ps; then
           docker-compose -f docker-compose.AuthService.yml down
+        else
+          echo "Docker Compose não está rodando."
         fi
         docker-compose -f docker-compose.AuthService.yml build --no-cache
         docker-compose -f docker-compose.AuthService.yml up -d
