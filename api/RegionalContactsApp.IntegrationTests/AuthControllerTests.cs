@@ -57,5 +57,25 @@ namespace RegionalContactsApp.IntegrationTests
             // Assert
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.Unauthorized);
         }
+
+        [Fact]
+        public async Task Login_ShouldReturnError_WhenUserAlreadyExists()
+        {
+            // Arrange
+            var loginModel = new
+            {
+                Username = "admin",
+                Password = "123456",
+                Role = "admin"
+            };
+
+            var content = new StringContent(JsonConvert.SerializeObject(loginModel), Encoding.UTF8, "application/json");
+
+            // Act
+            var response = await _client.PostAsync("/api/Auth/register", content);
+
+            // Assert
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.BadRequest);
+        }
     }
 }

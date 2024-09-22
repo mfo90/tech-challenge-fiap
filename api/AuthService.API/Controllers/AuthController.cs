@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using RegionalContactsApp.Domain.Entities;
 using RegionalContactsApp.Domain.Interfaces;
+using RegionalContactsApp.Infrastructure.Repositories;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -17,11 +18,13 @@ namespace AuthService.API.Controllers
     {
         private readonly IConfiguration _configuration;
         private readonly IUserService _userService;
+        private readonly IUserRepository _userRepository;
 
-        public AuthController(IConfiguration configuration, IUserService userService)
+        public AuthController(IConfiguration configuration, IUserService userService, IUserRepository userRepository)
         {
             _configuration = configuration;
             _userService = userService;
+            _userRepository = userRepository;
         }
 
         [HttpPost("login")]
@@ -38,6 +41,10 @@ namespace AuthService.API.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterModel register)
         {
+            var userExists = await _userRepository.GetUserByUsernameAsync(register.Username);
+            if (userExists != null && userExists.Id > 0)
+                return BadRequest("Usuário já existente na base.");
+
             await _userService.RegisterAsync(register.Username, register.Password, register.Role);
             return Ok();
         }
