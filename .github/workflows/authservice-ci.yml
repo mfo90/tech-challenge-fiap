@@ -1,6 +1,10 @@
 name: CI/CD Pipeline AuthService.API
 
 on:
+  workflow_run:
+    workflows: ["CI/CD Pipeline Infraestrutura de Serviços"] # Nome do workflow de serviço que esse workflow depende
+    types:
+      - completed
   push:
     branches:
       - feature/criar-deploy-microservices
@@ -52,6 +56,7 @@ jobs:
           --health-retries=5
 
     steps:
+    
     - name: Fazer checkout do código
       uses: actions/checkout@v3
 
