@@ -13,7 +13,6 @@ services:
       - monitoring_network
     labels:
       - "prometheus-job=api-auth"
-
 networks:
   monitoring_network:
     external: true
