@@ -64,7 +64,7 @@ namespace RegionalContactsApp.IntegrationTests
             // Arrange
             var loginModel = new
             {
-                Username = "admin2020",
+                Username = "admin",
                 Password = "123456",
                 Role = "admin"
             };
