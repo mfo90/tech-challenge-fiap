@@ -10,7 +10,7 @@ if (-not $networkExists) {
     Write-Host "A rede '$NetworkName' não foi encontrada. Criando a rede..."
     docker network create $NetworkName
 } else {
-    Write-Host "A rede '$NetworkName' já existe."
+    Write-Host "A rede '$NetworkName' já existe"
 }
 
 # Subir os serviços com Docker Compose
