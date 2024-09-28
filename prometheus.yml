@@ -1,0 +1,27 @@
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['prometheus:9090']
+
+  - job_name: 'api-auth'
+    static_configs:
+      - targets: ['api-auth:8081'] 
+
+  - job_name: 'regions-api'
+    static_configs:
+      - targets: ['regions-api:8083']
+
+  - job_name: 'contacts-api'
+    static_configs:
+      - targets: ['contacts-api:8082']
+
+  - job_name: 'node'
+    static_configs:
+      - targets: ['node-exporter:9100']
+
+  - job_name: 'postgres'
+    static_configs:
+      - targets: ['postgres-exporter:9187']

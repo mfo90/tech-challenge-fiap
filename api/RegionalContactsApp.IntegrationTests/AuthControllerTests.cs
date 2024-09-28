@@ -8,11 +8,11 @@ using Xunit;
 
 namespace RegionalContactsApp.IntegrationTests
 {
-    public class AuthControllerTests : IClassFixture<WebApplicationFactory<Program>>
+    public class AuthControllerTests : IClassFixture<WebApplicationFactory<AuthService.API.Program>>
     {
         private readonly HttpClient _client;
 
-        public AuthControllerTests(WebApplicationFactory<Program> factory)
+        public AuthControllerTests(WebApplicationFactory<AuthService.API.Program> factory)
         {
             _client = factory.CreateClient();
         }
@@ -56,6 +56,26 @@ namespace RegionalContactsApp.IntegrationTests
 
             // Assert
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.Unauthorized);
+        }
+
+        [Fact]
+        public async Task Login_ShouldReturnError_WhenUserAlreadyExists()
+        {
+            // Arrange
+            var loginModel = new
+            {
+                Username = "admin",
+                Password = "123456",
+                Role = "admin"
+            };
+
+            var content = new StringContent(JsonConvert.SerializeObject(loginModel), Encoding.UTF8, "application/json");
+
+            // Act
+            var response = await _client.PostAsync("/api/Auth/register", content);
+
+            // Assert
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.BadRequest);
         }
     }
 }

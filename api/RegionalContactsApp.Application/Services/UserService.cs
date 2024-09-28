@@ -1,9 +1,12 @@
-﻿using RegionalContactsApp.Domain.Entities;
+﻿using Microsoft.Extensions.Configuration;
+using RabbitMQ.Client;
+using RegionalContactsApp.Domain.Entities;
 using RegionalContactsApp.Domain.Interfaces;
 using System;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace RegionalContactsApp.Application.Services
 {
@@ -11,12 +14,14 @@ namespace RegionalContactsApp.Application.Services
     {
         private readonly IUserRepository _userRepository;
         private readonly byte[] _key;
+        private readonly IConfiguration _configuration;
 
-        public UserService(IUserRepository userRepository)
+        public UserService(IUserRepository userRepository, IConfiguration configuration)
         {
             _userRepository = userRepository;
             // Usar uma chave fixa para HMACSHA512 (isso é para simplificação, para produção você deve usar um salt único para cada senha)
             _key = Encoding.UTF8.GetBytes("a-secure-key-of-your-choice");
+            _configuration = configuration;
         }
 
         public async Task<User> AuthenticateAsync(string username, string password)
@@ -37,7 +42,9 @@ namespace RegionalContactsApp.Application.Services
                 Role = role
             };
 
-            await _userRepository.AddUserAsync(user);
+            SendMessageToQueue(user);
+
+            //await _userRepository.AddUserAsync(user);
         }
 
         private string CreatePasswordHash(string password)
@@ -60,5 +67,36 @@ namespace RegionalContactsApp.Application.Services
                 return hashString == storedHash;
             }
         }
+
+
+        public void SendMessageToQueue<T>(T messageObject)
+        {
+            var factory = new ConnectionFactory()
+            {
+                HostName = _configuration["RabbitMQ:HostName"],
+                UserName = _configuration["RabbitMQ:UserName"],
+                Password = _configuration["RabbitMQ:Password"]
+            };
+
+            using (var connection = factory.CreateConnection())
+            using (var channel = connection.CreateModel())
+            {
+                channel.QueueDeclare(queue: "UserRegisteredQueue",
+                                     durable: true,
+                                     exclusive: false,
+                                     autoDelete: false,
+                                     arguments: null);
+
+                // Serialize the object to JSON
+                string jsonMessage = JsonConvert.SerializeObject(messageObject);
+                var body = Encoding.UTF8.GetBytes(jsonMessage);
+
+                channel.BasicPublish(exchange: "",
+                                     routingKey: "UserRegisteredQueue",
+                                     basicProperties: null,
+                                     body: body);
+            }
+        }
     }
+
 }

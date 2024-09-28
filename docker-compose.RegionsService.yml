@@ -1,0 +1,19 @@
+version: '3.8'
+services:
+  api-regions:
+    build: 
+      context: ./api
+      dockerfile: Dockerfile.RegionsApi
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ConnectionStrings__DefaultConnection=Server=db;Port=5432;Database=contactsdb;User Id=matheus;Password=123456;
+    ports:
+      - "8083:8083"
+    networks:
+      - monitoring_network
+    labels:
+      - "prometheus-job=api-regions"
+
+networks:
+  monitoring_network:
+    external: true

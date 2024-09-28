@@ -1,0 +1,19 @@
+version: '3.8'
+services:
+  api-contacts:
+    build: 
+      context: ./api
+      dockerfile: Dockerfile.ContactsApi
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ConnectionStrings__DefaultConnection=Server=db;Port=5432;Database=contactsdb;User Id=matheus;Password=123456;
+    ports:
+      - "8082:8082"
+    networks:
+      - monitoring_network
+    labels:
+      - "prometheus-job=api-contacts"
+
+networks:
+  monitoring_network:
+    external: true

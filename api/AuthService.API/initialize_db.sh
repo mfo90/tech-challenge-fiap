@@ -2,7 +2,7 @@
 set -e
 
 # Initialize database
-dotnet run --project api/AuthService.API/AuthService.API.csproj &
+dotnet run --project AuthService.API.csproj &
 
 # Wait for the app to initialize the database
 sleep 30

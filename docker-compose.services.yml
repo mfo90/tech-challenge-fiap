@@ -1,0 +1,143 @@
+services:
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: matheus
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: contactsdb
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - monitoring_network
+
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: matheus@email.com
+      PGADMIN_DEFAULT_PASSWORD: 123456
+    ports:
+      - "5050:80"
+    depends_on:
+      - db
+    networks:
+      - monitoring_network
+
+  postgres-exporter:
+    image: prometheuscommunity/postgres-exporter
+    environment:
+      DATA_SOURCE_NAME: "postgresql://matheus:123456@db:5432/contactsdb?sslmode=disable"
+    ports:
+      - "9187:9187"
+    depends_on:
+      - db
+    networks:
+      - monitoring_network
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - monitoring_network
+
+  zabbix-server:
+    image: zabbix/zabbix-server-pgsql:latest
+    environment:
+      DB_SERVER_HOST: zabbix-db
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: zabbixpass
+      POSTGRES_DB: zabbix
+    ports:
+      - "10051:10051"
+    volumes:
+      - zabbix-server-data:/var/lib/zabbix
+    depends_on:
+      - zabbix-db
+    networks:
+      - monitoring_network
+
+  zabbix-web:
+    image: zabbix/zabbix-web-nginx-pgsql:latest
+    environment:
+      ZBX_SERVER_HOST: zabbix-server
+      DB_SERVER_HOST: zabbix-db
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: zabbixpass
+      POSTGRES_DB: zabbix
+    ports:
+      - "8080:8080"
+    volumes:
+      - zabbix-web-data:/var/lib/zabbix
+    depends_on:
+      - zabbix-server
+    networks:
+      - monitoring_network
+
+  zabbix-db:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: zabbixpass
+      POSTGRES_DB: zabbix
+    ports:
+      - "5434:5432"
+    volumes:
+      - zabbix-db-data:/var/lib/postgresql/data
+    networks:
+      - monitoring_network
+
+  zabbix-agent:
+    image: zabbix/zabbix-agent:latest
+    environment:
+      ZBX_SERVER_HOST: zabbix-server
+      ZBX_HOSTNAME: zabbix-agent
+    ports:
+      - "10050:10050"
+    depends_on:
+      - zabbix-server
+    networks:
+      - monitoring_network
+
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    volumes:
+      - prometheus-data:/prometheus
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - monitoring_network
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana-storage:/var/lib/grafana
+    networks:
+      - monitoring_network
+
+  node-exporter:
+    image: prom/node-exporter:latest
+    ports:
+      - "9100:9100"
+    restart: unless-stopped
+    networks:
+      - monitoring_network
+
+volumes:
+  pgdata:
+  zabbix-server-data:
+  zabbix-web-data:
+  zabbix-db-data:
+  prometheus-data:
+  grafana-storage:
+
+networks:
+  monitoring_network:
+    external: true
