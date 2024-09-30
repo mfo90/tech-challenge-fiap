@@ -30,6 +30,9 @@ public class Program
         // Adicione a conex�o do banco de dados como um servi�o
         builder.Services.AddScoped<IDbConnection>(sp => new NpgsqlConnection(connectionString));
 
+        // Adicione o serviço HostedService para o Consumer RabbitMQ
+        builder.Services.AddHostedService<ContactConsumerService>();
+
         // Adicione a configura��o da string de conex�o
         builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
 

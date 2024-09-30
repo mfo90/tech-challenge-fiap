@@ -44,7 +44,15 @@ namespace RegionalContactsApp.Application.Services
                 throw new ValidationException("Email already in use.");
             }
 
-            await _contactRepository.AddAsync(contact);
+            // Criação da mensagem com a operação "Create"
+            var contactMessage = new ContactMessage
+            {
+                Operation = "Create",  // Define a operação como "Create"
+                Contact = contact
+            };
+            SendMessageToQueue(contactMessage);
+
+            //await _contactRepository.AddAsync(contact);
         }
 
         public async Task UpdateContactAsync(Contact contact)
@@ -62,12 +70,31 @@ namespace RegionalContactsApp.Application.Services
                 throw new ValidationException("Email already in use.");
             }
 
-            await _contactRepository.UpdateAsync(contact);
+            // Criação da mensagem com a operação "Create"
+            var contactMessage = new ContactMessage
+            {
+                Operation = "Update",  // Define a operação como "Update"
+                Contact = contact
+            };
+
+            SendMessageToQueue(contactMessage);
+
+            //await _contactRepository.UpdateAsync(contact);
         }
 
         public async Task DeleteContactAsync(int id)
         {
-            await _contactRepository.DeleteAsync(id);
+            // Criação da mensagem com a operação "Create"
+            var contactMessage = new ContactMessage
+            {
+                Operation = "Delete",  // Define a operação como "Delete"
+                Contact.id = id
+            };
+
+            SendMessageToQueue(contactMessage);
+
+
+            //await _contactRepository.DeleteAsync(id);
         }
 
         private void ValidateContact(Contact contact)
@@ -124,6 +151,34 @@ namespace RegionalContactsApp.Application.Services
         public async Task<Contact> GetContactByEmailAsync(string email)
         {
             return await _contactRepository.GetContactByEmailAsync(email);
+        }
+        public void SendMessageToQueue(ContactMessage contactMessage)
+        {
+            var factory = new ConnectionFactory()
+            {
+                HostName = _configuration["RabbitMQ:HostName"],
+                UserName = _configuration["RabbitMQ:UserName"],
+                Password = _configuration["RabbitMQ:Password"]
+            };
+
+            using (var connection = factory.CreateConnection())
+            using (var channel = connection.CreateModel())
+            {
+                channel.QueueDeclare(queue: "ContactRegisteredQueue",
+                                     durable: true,
+                                     exclusive: false,
+                                     autoDelete: false,
+                                     arguments: null);
+
+                // Serialize the object to JSON
+                string jsonMessage = JsonConvert.SerializeObject(contactMessage);
+                var body = Encoding.UTF8.GetBytes(jsonMessage);
+
+                channel.BasicPublish(exchange: "",
+                                     routingKey: "ContactRegisteredQueue",
+                                     basicProperties: null,
+                                     body: body);
+            }
         }
     }
 }

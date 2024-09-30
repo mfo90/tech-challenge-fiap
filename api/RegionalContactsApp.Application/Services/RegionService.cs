@@ -31,13 +31,33 @@ namespace RegionalContactsApp.Application.Services
         public async Task AddRegionAsync(Region region)
         {
             ValidateRegion(region);
-            await _regionRepository.AddAsync(region);
+
+            // Criação da mensagem com a operação "Create"
+            var regionMessage = new RegionMessage
+            {
+                Operation = "Create",  // Define a operação como "Create"
+                Region = region
+            };
+
+            SendMessageToQueue(regionMessage);
+
+            //await _regionRepository.AddAsync(region);
         }
 
         public async Task UpdateAsync(Region region)
         {
             ValidateRegion(region);
-            await _regionRepository.UpdateAsync(region);
+
+            // Criação da mensagem com a operação "Create"
+            var regionMessage = new RegionMessage
+            {
+                Operation = "Update",  // Define a operação como "Update"
+                Region = region
+            };
+
+            SendMessageToQueue(regionMessage);
+
+            //await _regionRepository.UpdateAsync(region);
         }
 
         public async Task DeleteAsync(string ddd)
@@ -47,6 +67,17 @@ namespace RegionalContactsApp.Application.Services
             {
                 throw new ValidationException("Cannot delete region with contacts.");
             }
+
+
+            // Criação da mensagem com a operação "Create"
+            var regionMessage = new RegionMessage
+            {
+                Operation = "Delete",  // Define a operação como "Delete"
+                Region.DDD = ddd
+            };
+
+            SendMessageToQueue(regionMessage);
+
 
             await _regionRepository.DeleteAsync(ddd);
         }
@@ -68,6 +99,35 @@ namespace RegionalContactsApp.Application.Services
             if (region.Name.Length > 100)
             {
                 throw new ValidationException("Name cannot exceed 100 characters.");
+            }
+        }
+
+        public void SendMessageToQueue(RegionMessage regionMessage)
+        {
+            var factory = new ConnectionFactory()
+            {
+                HostName = _configuration["RabbitMQ:HostName"],
+                UserName = _configuration["RabbitMQ:UserName"],
+                Password = _configuration["RabbitMQ:Password"]
+            };
+
+            using (var connection = factory.CreateConnection())
+            using (var channel = connection.CreateModel())
+            {
+                channel.QueueDeclare(queue: "RegionRegisteredQueue",
+                                     durable: true,
+                                     exclusive: false,
+                                     autoDelete: false,
+                                     arguments: null);
+
+                // Serialize the object to JSON
+                string jsonMessage = JsonConvert.SerializeObject(regionMessage);
+                var body = Encoding.UTF8.GetBytes(jsonMessage);
+
+                channel.BasicPublish(exchange: "",
+                                     routingKey: "RegionRegisteredQueue",
+                                     basicProperties: null,
+                                     body: body);
             }
         }
     }
