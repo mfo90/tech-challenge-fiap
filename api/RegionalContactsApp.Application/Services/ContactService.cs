@@ -1,9 +1,13 @@
-﻿using RegionalContactsApp.Domain.Entities;
+﻿using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
+using RabbitMQ.Client;
+using RegionalContactsApp.Domain.Entities;
 using RegionalContactsApp.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace RegionalContactsApp.Application.Services
@@ -12,11 +16,16 @@ namespace RegionalContactsApp.Application.Services
     {
         private readonly IContactRepository _contactRepository;
         private readonly IRegionRepository _regionRepository;
+        private readonly byte[] _key;
+        private readonly IConfiguration _configuration;
 
-        public ContactService(IContactRepository contactRepository, IRegionRepository regionRepository)
+        public ContactService(IContactRepository contactRepository, IRegionRepository regionRepository, IConfiguration configuration)
         {
             _contactRepository = contactRepository;
             _regionRepository = regionRepository;
+            // Usar uma chave fixa para HMACSHA512 (isso é para simplificação, para produção você deve usar um salt único para cada senha)
+            _key = Encoding.UTF8.GetBytes("a-secure-key-of-your-choice");
+            _configuration = configuration;
         }
 
         public async Task<IEnumerable<Contact>> GetAllContactsAsync()
@@ -88,7 +97,10 @@ namespace RegionalContactsApp.Application.Services
             var contactMessage = new ContactMessage
             {
                 Operation = "Delete",  // Define a operação como "Delete"
-                Contact.id = id
+                Contact = new Contact()  // Cria uma nova instância de Contact
+                {
+                    Id = id  // Atribui o valor de 'id' à propriedade 'Id' da instância de Contact
+                }
             };
 
             SendMessageToQueue(contactMessage);

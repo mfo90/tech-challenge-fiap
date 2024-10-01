@@ -1,9 +1,14 @@
-﻿using RegionalContactsApp.Domain.Entities;
+﻿using Microsoft.Extensions.Configuration;
+using RabbitMQ.Client;
+using RegionalContactsApp.Domain.Entities;
 using RegionalContactsApp.Domain.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.DataProtection.KeyManagement;
 
 namespace RegionalContactsApp.Application.Services
 {
@@ -11,11 +16,16 @@ namespace RegionalContactsApp.Application.Services
     {
         private readonly IRegionRepository _regionRepository;
         private readonly IContactRepository _contactRepository;
+        private readonly IConfiguration _configuration;
+        private readonly byte[] _key;
 
-        public RegionService(IRegionRepository regionRepository, IContactRepository contactRepository)
+        public RegionService(IRegionRepository regionRepository, IContactRepository contactRepository, IConfiguration configuration)
         {
             _regionRepository = regionRepository;
             _contactRepository = contactRepository;
+            // Usar uma chave fixa para HMACSHA512 (isso é para simplificação, para produção você deve usar um salt único para cada senha)
+            _key = Encoding.UTF8.GetBytes("a-secure-key-of-your-choice");
+            _configuration = configuration;
         }
 
         public async Task<IEnumerable<Region>> GetAllRegionsAsync()
@@ -72,14 +82,17 @@ namespace RegionalContactsApp.Application.Services
             // Criação da mensagem com a operação "Create"
             var regionMessage = new RegionMessage
             {
-                Operation = "Delete",  // Define a operação como "Delete"
-                Region.DDD = ddd
+                Operation = "Delete", // Define a operação como "Delete"
+                Region = new Region()  // Cria uma nova instância de Contact
+                {
+                    DDD = ddd  // Atribui o valor de 'id' à propriedade 'Id' da instância de Contact
+                }
             };
 
             SendMessageToQueue(regionMessage);
 
 
-            await _regionRepository.DeleteAsync(ddd);
+            //await _regionRepository.DeleteAsync(ddd);
         }
 
         private void ValidateRegion(Region region)

@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿using Microsoft.Extensions.Configuration;
+using Moq;
 using RegionalContactsApp.Application.Services;
 using RegionalContactsApp.Domain.Entities;
 using RegionalContactsApp.Domain.Interfaces;
@@ -11,12 +12,14 @@ namespace RegionalContactsApp.Tests
         private readonly Mock<IContactRepository> _mockContactRepository;
         private readonly Mock<IRegionRepository> _mockRegionRepository;
         private readonly ContactService _contactService;
+        private readonly Mock<IConfiguration> _configuration;
+        private readonly byte[] _key;
 
         public ContactServiceTests()
         {
             _mockContactRepository = new Mock<IContactRepository>();
             _mockRegionRepository = new Mock<IRegionRepository>();
-            _contactService = new ContactService(_mockContactRepository.Object, _mockRegionRepository.Object);
+            _contactService = new ContactService(_mockContactRepository.Object, _mockRegionRepository.Object, _configuration.Object);
         }
 
         [Fact]

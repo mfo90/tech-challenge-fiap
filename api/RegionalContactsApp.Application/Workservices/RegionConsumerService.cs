@@ -1,8 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Configuration;
+using RabbitMQ.Client;
+using RabbitMQ.Client.Events;
+using System;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using RegionalContactsApp.Domain.Entities;
+using RegionalContactsApp.Domain.Interfaces;
+using Newtonsoft.Json;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace RegionalContactsApp.Application.Workservices
 {
@@ -32,7 +39,7 @@ namespace RegionalContactsApp.Application.Workservices
             _connection = factory.CreateConnection();
             _channel = _connection.CreateModel();
 
-            _channel.QueueDeclare(queue: "ContactRegisteredQueue",
+            _channel.QueueDeclare(queue: "RegionRegisteredQueue",
                                   durable: true,
                                   exclusive: false,
                                   autoDelete: false,
@@ -58,7 +65,7 @@ namespace RegionalContactsApp.Application.Workservices
                     var regionRepository = scope.ServiceProvider.GetRequiredService<IRegionRepository>();
 
                     // Identificando o tipo de operação
-                    switch (contactMessage.Operation)
+                    switch (regionMessage.Operation)
                     {
                         case "Create":
                             // Criação de região
@@ -69,12 +76,12 @@ namespace RegionalContactsApp.Application.Workservices
                         case "Update":
                             // Atualização de contato
                             var updatedRegion = regionMessage.Region;
-                            await regionRepository.UpdateAsync(updatedContact);
+                            await regionRepository.UpdateAsync(updatedRegion);
                             break;
 
                         case "Delete":
                             // Exclusão de contato
-                            var regionIdToDelete = regionMessage.Region.ddd;
+                            var regionIdToDelete = regionMessage.Region.DDD;
                             await regionRepository.DeleteAsync(regionIdToDelete);
                             break;
 
@@ -85,7 +92,7 @@ namespace RegionalContactsApp.Application.Workservices
                 }
             };
 
-            _channel.BasicConsume(queue: "ContactRegisteredQueue",
+            _channel.BasicConsume(queue: "RegionRegisteredQueue",
                                   autoAck: true,
                                   consumer: consumer);
 

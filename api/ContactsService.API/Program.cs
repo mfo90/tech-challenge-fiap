@@ -4,6 +4,7 @@ using Microsoft.OpenApi.Models;
 using Npgsql;
 using Prometheus;
 using RegionalContactsApp.Application.Services;
+using RegionalContactsApp.Application.Workservices;
 using RegionalContactsApp.Domain.Interfaces;
 using RegionalContactsApp.Infrastructure.Repositories;
 using System.Data;

@@ -3,6 +3,8 @@ using RegionalContactsApp.Application.Services;
 using RegionalContactsApp.Domain.Entities;
 using RegionalContactsApp.Domain.Interfaces;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.Extensions.Configuration;
+
 
 namespace RegionalContactsApp.Tests
 {
@@ -11,12 +13,14 @@ namespace RegionalContactsApp.Tests
         private readonly Mock<IRegionRepository> _mockRegionRepository;
         private readonly Mock<IContactRepository> _mockContactRepository;
         private readonly RegionService _regionService;
+        private readonly Mock<IConfiguration> _configuration;
+        private readonly byte[] _key;
 
         public RegionServiceTests()
         {
             _mockRegionRepository = new Mock<IRegionRepository>();
             _mockContactRepository = new Mock<IContactRepository>();
-            _regionService = new RegionService(_mockRegionRepository.Object, _mockContactRepository.Object);
+            _regionService = new RegionService(_mockRegionRepository.Object, _mockContactRepository.Object, _configuration.Object);
         }
 
         [Fact]
