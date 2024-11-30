@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-service
+  labels:
+    app: auth-service
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: auth-service
+  template:
+    metadata:
+      labels:
+        app: auth-service
+        prometheus-job: api-auth # Rótulo para Prometheus
+    spec:
+      containers:
+      - name: auth-service
+        image: auth-service:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8081
+        envFrom:
+        - configMapRef:
+            name: auth-config
+      nodeSelector:
+        "kubernetes.io/os": linux # Garantir que roda em Linux

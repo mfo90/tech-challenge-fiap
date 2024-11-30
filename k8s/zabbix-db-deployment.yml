@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zabbix-db
+  namespace: monitoring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: zabbix-db
+  template:
+    metadata:
+      labels:
+        app: zabbix-db
+    spec:
+      containers:
+      - name: zabbix-db
+        image: postgres:latest
+        ports:
+        - containerPort: 5432
+        env:
+        - name: POSTGRES_USER
+          value: "zabbix"
+        - name: POSTGRES_PASSWORD
+          value: "zabbixpass"
+        - name: POSTGRES_DB
+          value: "zabbix"
+        volumeMounts:
+        - name: zabbix-db-data
+          mountPath: /var/lib/postgresql/data
+      volumes:
+      - name: zabbix-db-data
+        persistentVolumeClaim:
+          claimName: zabbix-db-pvc
