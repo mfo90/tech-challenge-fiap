@@ -7,7 +7,7 @@ on:
       - completed
   push:
     branches:
-      - feature/criar-deploy/microservices
+      - feature/criar-deploy-microservices
     paths:
       - 'api/AuthService.API/**'
       - 'api/RegionalContactsApp.IntegrationTests/AuthControllerTests.cs'
