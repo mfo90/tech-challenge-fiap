@@ -136,7 +136,7 @@ jobs:
 
   build:
     needs: test
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
       - name: Fazer checkout do código
@@ -144,40 +144,39 @@ jobs:
 
       - name: Configurar Minikube
         run: |
-          sudo apt-get update
-          sudo apt-get remove -y containerd
-          sudo apt-get install -y docker.io kubectl conntrack
-          curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
-          sudo install minikube-linux-amd64 /usr/local/bin/minikube
           minikube start --driver=docker
 
       - name: Configurar ambiente Docker para Minikube
-        run: eval $(minikube docker-env)
+        run: |
+          & minikube docker-env | Invoke-Expression
+        shell: powershell
 
-      - name: Construir e carregar imagem Docker no Minikube
+      - name: Construir imagem Docker e carregar no Minikube
         run: |
           docker build -t auth-service:latest -f ./api/Dockerfile.AuthApi ./api
           minikube image load auth-service:latest
+        shell: powershell
+
 
   deploy:
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
       - name: Fazer checkout do código
         uses: actions/checkout@v3
 
-      - name: Aplicar ConfigMap do AuthService
-        run: kubectl apply -f k8s/auth-configmap.yml -n monitoring
+      - name: Aplicar configurações do Kubernetes
+        run: |
+          kubectl create namespace monitoring --dry-run=client -o yaml | kubectl apply -f -
+          kubectl apply -f ./k8s/auth-configmap.yml -n monitoring
+          kubectl apply -f ./k8s/auth-deployment.yml -n monitoring
+          kubectl apply -f ./k8s/auth-service.yml -n monitoring
+        shell: powershell
 
-      - name: Aplicar Deployment do AuthService
-        run: kubectl apply -f k8s/auth-deployment.yml -n monitoring
+      - name: Verificar status do Kubernetes
+        run: |
+          kubectl get pods -n monitoring
+          kubectl get svc -n monitoring
+        shell: powershell
 
-      - name: Aplicar Service do AuthService
-        run: kubectl apply -f k8s/auth-service.yml -n monitoring
-
-      - name: Verificar status dos pods
-        run: kubectl get pods -n monitoring
-
-      - name: Verificar serviços
-        run: kubectl get svc -n monitoring
