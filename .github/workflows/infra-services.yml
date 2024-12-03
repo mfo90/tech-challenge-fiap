@@ -3,7 +3,7 @@ name: CI/CD Pipeline Infraestrutura de Serviços
 on:
   push:
     branches:
-      - main
+      - feature/implementar-kubernetes-final
     paths:
       - 'docker-compose.services.yml'    # Acionado quando este arquivo mudar
       - 'start.ps1'                      # Acionado quando este arquivo mudar

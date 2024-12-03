@@ -7,7 +7,7 @@ on:
       - completed
   push:
     branches:
-      - main
+      - feature/implementar-kubernetes-final
     paths:
       - 'api/AuthService.API/**'
       - 'api/RegionalContactsApp.IntegrationTests/AuthControllerTests.cs'
