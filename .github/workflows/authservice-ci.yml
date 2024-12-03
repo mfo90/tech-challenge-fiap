@@ -2,12 +2,12 @@ name: CI/CD Pipeline AuthService.API
 
 on:
   workflow_run:
-    workflows: ["CI/CD Pipeline Infraestrutura de Serviços"] #Nome do workflow de serviço que esse workflow depende
+    workflows: ["CI/CD Pipeline Infraestrutura de Serviço"] # Nome do workflow de serviço que esse workflow depende
     types:
       - completed
   push:
     branches:
-      - feature/criar-deploy-microservices
+      - feature/implementar-kubernetes-final
     paths:
       - 'api/AuthService.API/**'
       - 'api/RegionalContactsApp.IntegrationTests/AuthControllerTests.cs'
@@ -20,7 +20,6 @@ on:
       - 'docker-compose.AuthService.yml'
       - '.github/workflows/authservice-ci.yml'
       - 'api/Dockerfile.AuthApi'
-      - 'k8s/auth-*.yml'
   pull_request:
     branches:
       - main
@@ -36,7 +35,6 @@ on:
       - 'docker-compose.AuthService.yml'
       - '.github/workflows/authservice-ci.yml'
       - 'api/Dockerfile.AuthApi'
-      - 'k8s/auth-*.yml'
 
 jobs:
   test:
@@ -139,44 +137,45 @@ jobs:
     runs-on: self-hosted
 
     steps:
-      - name: Fazer checkout do código
-        uses: actions/checkout@v3
+    - name: Fazer checkout do código
+      uses: actions/checkout@v3
 
-      - name: Configurar Minikube
-        run: |
-          minikube start --driver=docker
+    - name: Configurar Docker Buildx
+      uses: docker/setup-buildx-action@v1
 
-      - name: Configurar ambiente Docker para Minikube
-        run: |
-          & minikube docker-env | Invoke-Expression
-        shell: powershell
+    - name: Construir imagens Docker da API de autenticação
+      run: |
+        docker build --no-cache --pull -t auth-api:latest -f ./api/Dockerfile.AuthApi ./api
+      shell: cmd
 
-      - name: Construir imagem Docker e carregar no Minikube
-        run: |
-          docker build -t auth-service:latest -f ./api/Dockerfile.AuthApi ./api
-          minikube image load auth-service:latest
-        shell: powershell
+    - name: Limpar cache do Docker
+      run: docker builder prune -f
+      shell: cmd
 
+    - name: Limpar sistema Docker
+      run: docker system prune -af --volumes
+      shell: cmd
 
   deploy:
     needs: build
     runs-on: self-hosted
 
     steps:
-      - name: Fazer checkout do código
-        uses: actions/checkout@v3
+    - name: Fazer checkout do código
+      uses: actions/checkout@v3
 
-      - name: Aplicar configurações do Kubernetes
-        run: |
-          kubectl create namespace monitoring --dry-run=client -o yaml | kubectl apply -f -
-          kubectl apply -f ./k8s/auth-configmap.yml -n monitoring
-          kubectl apply -f ./k8s/auth-deployment.yml -n monitoring
-          kubectl apply -f ./k8s/auth-service.yml -n monitoring
-        shell: powershell
+    - name: Verificar existência do diretório e navegar até ele
+      run: |
+        if not exist C:\projects\fiap (
+          echo "Criando o diretório C:\projects\fiap"
+          mkdir C:\projects\fiap
+        )
+        cd C:\projects\fiap
+      shell: cmd
 
-      - name: Verificar status do Kubernetes
-        run: |
-          kubectl get pods -n monitoring
-          kubectl get svc -n monitoring
-        shell: powershell
-
+    - name: Fazer deploy localmente
+      run: |
+        docker-compose -f docker-compose.AuthService.yml down || echo "Docker Compose não está rodando."
+        docker-compose -f docker-compose.AuthService.yml build --no-cache
+        docker-compose -f docker-compose.AuthService.yml up -d
+      shell: cmd

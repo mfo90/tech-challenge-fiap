@@ -7,7 +7,6 @@ services:
       POSTGRES_DB: contactsdb
     ports:
       - "5432:5432"
-      # lasd
     volumes:
       - pgdata:/var/lib/postgresql/data
     networks:
