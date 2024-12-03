@@ -1,6 +1,6 @@
 services:
   db:
-    image: postgres:latest
+    image: postgres:16
     environment:
       POSTGRES_USER: matheus
       POSTGRES_PASSWORD: 123456
@@ -78,7 +78,7 @@ services:
       - monitoring_network
 
   zabbix-db:
-    image: postgres:latest
+    image: postgres:16
     environment:
       POSTGRES_USER: zabbix
       POSTGRES_PASSWORD: zabbixpass
