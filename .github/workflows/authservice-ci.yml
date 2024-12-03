@@ -2,7 +2,7 @@ name: CI/CD Pipeline AuthService.API
 
 on:
   workflow_run:
-    workflows: ["CI/CD Pipeline Infraestrutura de Serviços"]
+    workflows: ["CI/CD Pipeline Infraestrutura de Serviços"] # Nome do workflow de serviço que esse workflow depende
     types:
       - completed
   push:
@@ -61,8 +61,8 @@ jobs:
           RABBITMQ_DEFAULT_USER: guest
           RABBITMQ_DEFAULT_PASS: guest
         ports:
-          - 5672:5672
-          - 15672:15672
+          - 5672:5672  # Porta padrão do RabbitMQ
+          - 15672:15672  # Porta do painel de gerenciamento do RabbitMQ
         options: >-
           --health-cmd="rabbitmqctl status"
           --health-interval=10s
@@ -70,98 +70,112 @@ jobs:
           --health-retries=5
 
     steps:
-      - name: Fazer checkout do código
-        uses: actions/checkout@v3
+    
+    - name: Fazer checkout do código
+      uses: actions/checkout@v3
 
-      - name: Configurar .NET Core
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: '8.0.x'
+    - name: Configurar .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '8.0.x'
 
-      - name: Esperar pelo Postgres
-        run: |
-          until pg_isready -h localhost -p 5432 -U matheus; do
-            echo "Esperando pelo Postgres...";
-            sleep 5;
-          done
+    - name: Esperar pelo Postgres
+      run: |
+        until pg_isready -h localhost -p 5432 -U matheus; do
+          echo "Esperando pelo Postgres...";
+          sleep 5;
+        done
 
-      - name: Esperar pelo RabbitMQ
-        run: |
-          until curl -f http://localhost:15672; do
-            echo "Esperando pelo RabbitMQ...";
-            sleep 5;
-          done
+    - name: Esperar pelo RabbitMQ
+      run: |
+        until curl -f http://localhost:15672; do
+          echo "Esperando pelo RabbitMQ...";
+          sleep 5;
+        done
 
-      - name: Inicializar banco de dados
-        run: |
-          chmod +x initialize_db.sh
-          ./initialize_db.sh
+    - name: Inicializar banco de dados
+      run: |
+        chmod +x initialize_db.sh
+        ./initialize_db.sh
 
-      - name: Restaurar dependências
-        run: dotnet restore api/RegionalRegionalContactsApp.sln
+    # Restaurar as dependências da solução completa
+    - name: Restaurar dependências
+      run: dotnet restore api/RegionalRegionalContactsApp.sln  # Restaurar a solução completa
 
-      - name: Compilar solução
-        run: dotnet build api/RegionalRegionalContactsApp.sln --no-restore --configuration Release
+    # Compilar a solução completa
+    - name: Compilar solução
+      run: dotnet build api/RegionalRegionalContactsApp.sln --no-restore --configuration Release  # Compilar a solução completa
 
-      - name: Executar testes unitários com cobertura
-        run: |
-          dotnet test api/RegionalContactsApp.Tests/RegionalContactsApp.Tests.csproj --no-build --configuration Release --collect:"XPlat Code Coverage" --results-directory ./TestResults/UnitTests
+    # Executar testes unitários no projeto RegionalContactsApp.Tests
+    - name: Executar testes unitários com cobertura (RegionalContactsApp.Tests)
+      run: |
+        dotnet test api/RegionalContactsApp.Tests/RegionalContactsApp.Tests.csproj --no-build --configuration Release --collect:"XPlat Code Coverage" --results-directory ./TestResults/UnitTests
 
-      - name: Executar testes de integração com cobertura
-        env:
-          ConnectionStrings__DefaultConnection: Server=localhost;Port=5432;Database=contactsdb;User Id=matheus;Password=123456;
-        run: |
-          dotnet test api/RegionalContactsApp.IntegrationTests/RegionalContactsApp.IntegrationTests.csproj --no-build --configuration Release --collect:"XPlat Code Coverage" --results-directory ./TestResults/IntegrationTests
+    # Executar testes de integração no projeto RegionalContactsApp.IntegrationTests
+    - name: Executar testes de integração com cobertura (RegionalContactsApp.IntegrationTests)
+      env:
+        ConnectionStrings__DefaultConnection: Server=localhost;Port=5432;Database=contactsdb;User Id=matheus;Password=123456;
+      run: |
+        dotnet test api/RegionalContactsApp.IntegrationTests/RegionalContactsApp.IntegrationTests.csproj --no-build --configuration Release --collect:"XPlat Code Coverage" --results-directory ./TestResults/IntegrationTests
 
-      - name: Relatar cobertura dos testes unitários
-        uses: actions/upload-artifact@v3
-        with:
-          name: cobertura-teste-unitario
-          path: ./TestResults/UnitTests
+    # Relatar cobertura dos testes unitários
+    - name: Relatar cobertura dos testes unitários
+      uses: actions/upload-artifact@v3
+      with:
+        name: cobertura-teste-unitario
+        path: ./TestResults/UnitTests
 
-      - name: Relatar cobertura dos testes de integração
-        uses: actions/upload-artifact@v3
-        with:
-          name: cobertura-teste-integracao
-          path: ./TestResults/IntegrationTests
+    # Relatar cobertura dos testes de integração
+    - name: Relatar cobertura dos testes de integração
+      uses: actions/upload-artifact@v3
+      with:
+        name: cobertura-teste-integracao
+        path: ./TestResults/IntegrationTests
 
   build:
     needs: test
     runs-on: self-hosted
 
     steps:
-      - name: Fazer checkout do código
-        uses: actions/checkout@v3
+    - name: Fazer checkout do código
+      uses: actions/checkout@v3
 
-      - name: Iniciar o Minikube
-        run: |
-          minikube status || minikube start --driver=docker
-        shell: bash
+    - name: Configurar Docker Buildx
+      uses: docker/setup-buildx-action@v1
 
-      - name: Configurar Docker para usar Minikube
-        run: |
-          eval $(minikube docker-env)
-        shell: bash
+    - name: Construir imagens Docker da API de autenticação
+      run: |
+        docker build --no-cache --pull -t auth-api:latest -f ./api/Dockerfile.AuthApi ./api
+      shell: cmd
 
-      - name: Construir a imagem Docker
-        run: |
-          docker build -t auth-service:latest -f ./api/Dockerfile.AuthApi ./api
-        shell: bash
+    - name: Limpar cache do Docker
+      run: docker builder prune -f
+      shell: cmd
 
-      - name: Carregar imagem no Minikube
-        run: |
-          minikube image load auth-service:latest
-        shell: bash
+    - name: Limpar sistema Docker
+      run: docker system prune -af --volumes
+      shell: cmd
 
   deploy:
     needs: build
     runs-on: self-hosted
 
     steps:
-      - name: Fazer checkout do código
-        uses: actions/checkout@v3
+    - name: Fazer checkout do código
+      uses: actions/checkout@v3
 
-      - name: Aplicar manifests no Kubernetes
-        run: |
-          kubectl apply -f k8s/ -n monitoring
-        shell: bash
+    - name: Verificar existência do diretório e navegar até ele
+      run: |
+        if not exist C:\projects\fiap (
+          echo "Criando o diretório C:\projects\fiap"
+          mkdir C:\projects\fiap
+        )
+        cd C:\projects\fiap
+      shell: cmd
+
+    - name: Fazer deploy localmente
+      run: |
+        docker-compose -f docker-compose.AuthService.yml down || echo "Docker Compose não está rodando."
+        docker-compose -f docker-compose.AuthService.yml build --no-cache
+        docker-compose -f docker-compose.AuthService.yml up -d
+      shell: cmd
