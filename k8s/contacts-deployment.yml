@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: contacts-service
+  namespace: monitoring
+  labels:
+    app: contacts-service
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: contacts-service
+  template:
+    metadata:
+      labels:
+        app: contacts-service
+        prometheus-job: api-contacts
+    spec:
+      containers:
+      - name: contacts-service
+        image: contacts-service:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8082
+        envFrom:
+        - configMapRef:
+            name: contacts-config
+      nodeSelector:
+        "kubernetes.io/os": linux

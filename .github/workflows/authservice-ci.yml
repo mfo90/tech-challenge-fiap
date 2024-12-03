@@ -20,6 +20,7 @@ on:
       - 'docker-compose.AuthService.yml'
       - '.github/workflows/authservice-ci.yml'
       - 'api/Dockerfile.AuthApi'
+      - 'k8s/auth-*.yml'
   pull_request:
     branches:
       - main
@@ -35,6 +36,7 @@ on:
       - 'docker-compose.AuthService.yml'
       - '.github/workflows/authservice-ci.yml'
       - 'api/Dockerfile.AuthApi'
+      - 'k8s/auth-*.yml'
 
 jobs:
   test:
@@ -134,48 +136,47 @@ jobs:
 
   build:
     needs: test
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
 
     steps:
-    - name: Fazer checkout do código
-      uses: actions/checkout@v3
+      - name: Fazer checkout do código
+        uses: actions/checkout@v3
 
-    - name: Configurar Docker Buildx
-      uses: docker/setup-buildx-action@v1
+      - name: Configurar Minikube
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker.io kubectl conntrack
+          curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+          sudo install minikube-linux-amd64 /usr/local/bin/minikube
+          minikube start --driver=docker
 
-    - name: Construir imagens Docker da API de autenticação
-      run: |
-        docker build --no-cache --pull -t auth-api:latest -f ./api/Dockerfile.AuthApi ./api
-      shell: cmd
+      - name: Configurar ambiente Docker para Minikube
+        run: eval $(minikube docker-env)
 
-    - name: Limpar cache do Docker
-      run: docker builder prune -f
-      shell: cmd
-
-    - name: Limpar sistema Docker
-      run: docker system prune -af --volumes
-      shell: cmd
+      - name: Construir e carregar imagem Docker no Minikube
+        run: |
+          docker build -t auth-service:latest -f ./api/Dockerfile.AuthApi ./api
+          minikube image load auth-service:latest
 
   deploy:
     needs: build
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
 
     steps:
-    - name: Fazer checkout do código
-      uses: actions/checkout@v3
+      - name: Fazer checkout do código
+        uses: actions/checkout@v3
 
-    - name: Verificar existência do diretório e navegar até ele
-      run: |
-        if not exist C:\projects\fiap (
-          echo "Criando o diretório C:\projects\fiap"
-          mkdir C:\projects\fiap
-        )
-        cd C:\projects\fiap
-      shell: cmd
+      - name: Aplicar ConfigMap do AuthService
+        run: kubectl apply -f k8s/auth-configmap.yml -n monitoring
 
-    - name: Fazer deploy localmente
-      run: |
-        docker-compose -f docker-compose.AuthService.yml down || echo "Docker Compose não está rodando."
-        docker-compose -f docker-compose.AuthService.yml build --no-cache
-        docker-compose -f docker-compose.AuthService.yml up -d
-      shell: cmd
+      - name: Aplicar Deployment do AuthService
+        run: kubectl apply -f k8s/auth-deployment.yml -n monitoring
+
+      - name: Aplicar Service do AuthService
+        run: kubectl apply -f k8s/auth-service.yml -n monitoring
+
+      - name: Verificar status dos pods
+        run: kubectl get pods -n monitoring
+
+      - name: Verificar serviços
+        run: kubectl get svc -n monitoring

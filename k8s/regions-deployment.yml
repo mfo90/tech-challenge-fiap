@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: regions-service
+  namespace: monitoring
+  labels:
+    app: regions-service
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: regions-service
+  template:
+    metadata:
+      labels:
+        app: regions-service
+        prometheus-job: api-regions
+    spec:
+      containers:
+      - name: regions-service
+        image: regions-service:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8083
+        envFrom:
+        - configMapRef:
+            name: regions-config
+      nodeSelector:
+        "kubernetes.io/os": linux
