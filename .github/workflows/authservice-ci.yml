@@ -2,7 +2,7 @@ name: CI/CD Pipeline AuthService.API
 
 on:
   workflow_run:
-    workflows: ["CI/CD Pipeline Infraestrutura de Serviço"] # Nome   a do workflow de serviço que esse workflow depende
+    workflows: ["CI/CD Pipeline Infraestrutura de Serviço"] # Nome  s a do workflow de serviço que esse workflow depende
     types:
       - completed
   push:
