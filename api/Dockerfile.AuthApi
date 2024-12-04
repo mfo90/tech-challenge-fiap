@@ -4,7 +4,7 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 # Set the working directory in the image
 WORKDIR /src
 
-# Copy the .csproj files and restore dependencies
+# Copy the .csproj files and restore dependencies teste
 COPY AuthService.API/*.csproj AuthService.API/
 COPY RegionalContactsApp.Application/*.csproj RegionalContactsApp.Application/
 COPY RegionalContactsApp.Domain/*.csproj RegionalContactsApp.Domain/
