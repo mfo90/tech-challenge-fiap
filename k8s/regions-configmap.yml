@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: regions-config
+  namespace: monitoring
+data:
+  ASPNETCORE_ENVIRONMENT: "Production"
+  ConnectionStrings__DefaultConnection: "Server=db;Port=5432;Database=contactsdb;User Id=matheus;Password=123456;"

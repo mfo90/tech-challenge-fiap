@@ -3,11 +3,12 @@ name: CI/CD Pipeline AuthService.API
 on:
   workflow_run:
     workflows: ["CI/CD Pipeline Infraestrutura de Serviço"] # Nome do workflow de serviço que esse workflow depende
+      main
     types:
       - completed
   push:
     branches:
-      - main
+      - feature/criar-deploy-microservices
     paths:
       - 'api/AuthService.API/**'
       - 'api/RegionalContactsApp.IntegrationTests/AuthControllerTests.cs'

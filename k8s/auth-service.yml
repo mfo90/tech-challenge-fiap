@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-service
+  namespace: monitoring 
+spec:
+  type: NodePort
+  # externalTrafficPolicy: Local
+  selector:
+    app: auth-service 
+  ports:
+  - protocol: TCP
+    port: 8081           # Porta interna do cluster (Service)
+    targetPort: 8081     # Porta onde o container está escutando
+    nodePort: 30081      # Porta exposta para acesso externo
