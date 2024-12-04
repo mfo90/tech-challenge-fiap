@@ -2,12 +2,12 @@ apiVersion: v1
 kind: Service
 metadata:
   name: auth-service
-  namespace: monitoring # Adicione o namespace se necessário
+  namespace: monitoring 
 spec:
   type: NodePort
   # externalTrafficPolicy: Local
   selector:
-    app: auth-service # Deve coincidir com o `app` definido no Deployment
+    app: auth-service 
   ports:
   - protocol: TCP
     port: 8081           # Porta interna do cluster (Service)
